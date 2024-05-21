@@ -15,10 +15,10 @@ const Header = () => {
                     <div className="col-md-8 text-md-left text-center">
                         <ul>
                             <li>
-                                <p><i className="fa fa-map-marker"></i> 2072 Pinnickinick Street, WA 98370</p>
+                                <p><i className="fa fa-map-marker"></i> FPT University - SWP391</p>
                             </li>
                             <li>
-                                <p><i className="fa fa-envelope-o"></i> info@website.com</p>
+                                <p><i className="fa fa-envelope-o"></i> hoangdn1309@gmail.com</p>
                             </li>
                         </ul>
                     </div>
