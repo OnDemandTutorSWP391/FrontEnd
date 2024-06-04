@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { axiosClient } from "../../axios/AxiosClient";
-import { toast } from 'react-toastify'; // Assuming you're using react-toastify for notifications
+import { ToastContainer, toast } from 'react-toastify';
 import useStore from '../../app/store';
 import { postLogin } from '../../service/AccountService';
+import 'react-toastify/dist/ReactToastify.css';
 
 
  // Adjust the import according to your project structure
 
 const LoginPage = () => {
-  const { setToken } = useStore();
+  const { setToken, setRefreshToken, isLoggedIn } = useStore();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -23,7 +24,6 @@ const LoginPage = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
   
-    try {
       const { data, err } = await postLogin(formData);
       if (err) {
         toast.error("Login fail!");
@@ -34,18 +34,21 @@ const LoginPage = () => {
       const {accessToken, refreshToken}  = data.data;
       console.log(`${data.data.accessToken}`);
   
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
-      useStore.getState().setToken(accessToken); // Update the token in the Zustand store
-      
-  
+      // localStorage.setItem("accessToken", accessToken);
+      // localStorage.setItem("refreshToken", refreshToken);
+      setToken(accessToken) // Update the token in the Zustand store
+      setRefreshToken(refreshToken);
+      useStore.getState().setRef
       console.log(accessToken);
-      navigate("/");
-      toast.success("Login success!");
-    } catch (err) {
-      toast.error("Login failed!");
-    }
+      if (isLoggedIn()) {
+        navigate("/");
+        toast.success("Login success!");
+      }else {
+        toast.error("error")
+      }
+    
   };
+  
 
   return (
     <>
@@ -90,10 +93,12 @@ const LoginPage = () => {
                   </div>
                   <div className="col-12 mb-4">
                     <button className="btn btn-base w-100" type="submit">Sign In</button>
+                    <ToastContainer />
                   </div>
                   <div className="col-12">
-                    <a href="#">Forgotten Your Password?</a>
-                    <a href="signup.html"><strong>Signup</strong></a>
+                    <a href="/forget-password">Forgotten Your Password?</a>
+                    <a href="/register"><strong>Signup</strong></a>
+
                   </div>
                 </div>
               </form>

@@ -6,5 +6,13 @@ const postLogin = async (formData) => {
      
     }
   }
- 
- export { postLogin };
+const getUserProfile = async () => {
+  return await axiosClient.get("/Users/GetUserProfile")
+}
+const postRegister = async (formData) => {
+  return await axiosClient.post("/Users/SignUp", formData)
+}
+const postForgetPassword = async (formData) => {
+  return await axiosClient.post("/Users/ForgotPassword", formData)
+}
+ export { postLogin, getUserProfile, postRegister, postForgetPassword };

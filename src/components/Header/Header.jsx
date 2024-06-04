@@ -3,9 +3,15 @@ import "../assets/css/color.css"
 import "../assets/css/responsive.css"
 import "../assets/css/style.css"
 import "../assets/css/vendor.css"
+import useStore from '../../app/store'
+import { checkTokenExpiration } from '../../service/Tools'
 const Header = () => {
-    
-    
+    const { setToken, setRefreshToken, isLoggedIn, user, clearToken } = useStore();
+    useEffect(() => {
+        if (checkTokenExpiration()) {
+            clearToken();
+        }
+    }, []);
   return (
     <div className="navbar-area">
         
@@ -45,11 +51,20 @@ const Header = () => {
                     </button>
                 </div>
                 <div className="logo">
-                    <a href="index.html"><img src="/public/img/logo.png" alt="img"/></a>
+                    <a href="/"><img src="/public/img/logo.png" alt="img"/></a>
                 </div>
                 <div className="nav-right-part nav-right-part-mobile">
-                    <a className="signin-btn" href="/login">Sign In</a>
-                    <a className="btn btn-base" href="signup.html">Sign Up</a>
+                {isLoggedIn() ? (
+              <div>
+                <a href="/userProfile">Welcome, {user?.email || 'User'}</a>
+                <button onClick={clearToken}>Logout</button>
+              </div>
+            ) : (
+              <>
+                <a className="signin-btn" href="/login">Sign In</a>
+                <a className="btn btn-base" href="/register">Sign Up</a>
+              </>
+            )}
                     <a className="search-bar" href="#"><i className="fa fa-search"></i></a>
                 </div>
                 <div className="collapse navbar-collapse" id="edumint_main_menu">
@@ -95,8 +110,20 @@ const Header = () => {
                     </ul>
                 </div>
                 <div className="nav-right-part nav-right-part-desktop">
-                    <a className="signin-btn" href="login">Sign In</a>
-                    <a className="btn btn-base" href="signup.html">Sign Up</a>
+                {isLoggedIn() ? (
+                    
+              <div>
+                
+                <a href="/userProfile">Welcome, {user?.email || 'User'}</a>
+                <button onClick={clearToken}>Logout</button>
+              </div>
+            ) : (
+              <>
+                <a className="signin-btn" href="/login">Sign In</a>
+                <a className="btn btn-base" href="/register">Sign Up</a>
+              </>
+            )}
+                    
                     <a className="search-bar" href="#"><i className="fa fa-search"></i></a>
                 </div>
             </div>
