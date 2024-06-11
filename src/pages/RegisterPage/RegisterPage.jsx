@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { postRegister } from '../../service/AccountService';
-import { toast } from 'react-toastify'; // Make sure to install and import react-toastify
+import { ToastContainer, toast } from 'react-toastify'; // Make sure to install and import react-toastify
+import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const RegisterPage = () => {
     avatar: "",
     role: "",
   });
+  const navigate = useNavigate();
 
   const handleDataChange = (key, value) => {
     setFormData({ ...formData, [key]: value });
@@ -29,6 +31,7 @@ const RegisterPage = () => {
     if (response.err) {
       toast.error("Registration failed");
     } else {
+      navigate("/login")
       toast.success("Registration successful");
     }
     // handle response
@@ -83,7 +86,7 @@ const RegisterPage = () => {
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
-                      <input type="text" placeholder="DOB" onChange={(e) => handleDataChange("dob", e.target.value)} />
+                      <input type="date" placeholder="DOB" onChange={(e) => handleDataChange("dob", e.target.value)} />
                     </div>
                   </div>
                   <div className="col-12">
@@ -117,6 +120,7 @@ const RegisterPage = () => {
                   </div>
                   <div className="col-12 mb-4">
                     <button className="btn btn-base w-100" type="submit">Create Account</button>
+                    <ToastContainer/>
                   </div>
                   <div className="col-12">
                     <span>By creating an account</span>

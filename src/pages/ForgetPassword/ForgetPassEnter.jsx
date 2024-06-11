@@ -1,27 +1,34 @@
-import React, { useState } from 'react';
-import { postForgetPassword } from '../../service/AccountService';
-import { ToastContainer, toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { postForgetPassword, postResetPassword } from '../../service/AccountService';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-const ForgetPassword = () => {
+const ForgetPassEnter = () => {
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
+  const email = searchParams.get('email');
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
+    newPassword: '',
+    confirmedNewPassword: '',
+    email: email,
+    token: token,
   });
+  
 
   const handleDataChange = (key, value) => {
     setFormData({ ...formData, [key]: value });
   };
 
-  const handleForgotPassword = async (e) => {
-    e.preventDefault();
-    const { data, err } = await postForgetPassword(formData);
-    if (err) {
-       toast.error("error")
-    } else {
-      toast.success("please check your email!")
-    }
-  };
+  const handleResetPassword = async (e) => {
+    e.preventDefault()
+    const { data, err } = await postResetPassword(formData);
+    console.log(formData);
+    
+    
+
+  }
+
 
   return (
     <div>
@@ -40,22 +47,30 @@ const ForgetPassword = () => {
                           We get it, stuff happens. Just enter your email address below and we'll send you a link to reset your password!
                         </p>
                       </div>
-                      <form className="user" onSubmit={handleForgotPassword}>
+                      <form className="user" onClick={handleResetPassword}>
                         <div className="form-group">
                           <input
                             type="email"
                             className="form-control form-control-user"
                             id="exampleInputEmail"
                             aria-describedby="emailHelp"
-                            placeholder="Enter Email Address..."
-                            value={formData.email}
-                            onChange={(e) => handleDataChange('email', e.target.value)}
+                            placeholder="New Password"
+                            value={formData.newPassword}
+                            onChange={(e) => handleDataChange('newPassword', e.target.value)}
+                          />
+                          <input
+                            type="email"
+                            className="form-control form-control-user"
+                            id="exampleInputEmail"
+                            aria-describedby="emailHelp"
+                            placeholder="Confirm Password"
+                            value={formData.confirmedNewPassword}
+                            onChange={(e) => handleDataChange('confirmedNewPassword', e.target.value)}
                           />
                         </div>
                         <button type="submit" className="btn btn-primary btn-user btn-block">
                           Reset Password
                         </button>
-                        <ToastContainer/>
                       </form>
                       <hr />
                       <div className="text-center">
@@ -80,4 +95,4 @@ const ForgetPassword = () => {
   );
 };
 
-export default ForgetPassword;
+export default ForgetPassEnter;

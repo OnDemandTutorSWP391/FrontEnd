@@ -27,7 +27,31 @@
   "dependencies": {
   
     
+  "@emotion/react": "^11.11.4",
+  
+    
+  "@emotion/styled": "^11.11.5",
+  
+    
+  "@mui/icons-material": "^5.15.19",
+  
+    
+  "@mui/material": "^5.15.19",
+  
+    
+  "@mui/x-data-grid": "^7.6.1",
+  
+    
+  "@nivo/core": "^0.87.0",
+  
+    
   "axios": "^1.7.2",
+  
+    
+  "formik": "^2.4.6",
+  
+    
+  "i": "^0.3.7",
   
     
   "jwt-decode": "^4.0.0",
@@ -39,10 +63,16 @@
   "match-sorter": "^6.3.4",
   
     
+  "npm": "^10.8.1",
+  
+    
   "react": "^18.2.0",
   
     
   "react-dom": "^18.2.0",
+  
+    
+  "react-pro-sidebar": "^0.7.1",
   
     
   "react-router-dom": "^6.23.1",
@@ -52,6 +82,9 @@
   
     
   "sort-by": "^1.2.0",
+  
+    
+  "yup": "^1.4.0",
   
     
   "zustand": "^4.5.2"
