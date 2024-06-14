@@ -56,7 +56,7 @@ const Header = () => {
                 <div className="nav-right-part nav-right-part-mobile">
                 {isLoggedIn() ? (
               <div>
-                <a href="/userProfile">Welcome, {user?.email || 'User'}</a>
+                <a href="/profile">Welcome, {user?.email || 'User'}</a>
                 <button onClick={clearToken}>Logout</button>
               </div>
             ) : (
@@ -80,8 +80,8 @@ const Header = () => {
                         <li className="menu-item-has-children">
                             <a href="#">Course</a>
                             <ul className="sub-menu">
-                                <li><a href="course.html">Course</a></li>
-                                <li><a href="course-details.html">Course Single</a></li>
+                                <li><a href="/course-list">Course</a></li>
+                                
                             </ul>
                         </li>
                         <li className="menu-item-has-children">
@@ -114,7 +114,7 @@ const Header = () => {
                     
               <div>
                 
-                <a href="/userProfile">Welcome, {user?.email || 'User'}</a>
+                <a href="/profile">Welcome, {user?.email || 'User'}</a>
                 <button onClick={clearToken}>Logout</button>
               </div>
             ) : (
