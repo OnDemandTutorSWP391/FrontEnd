@@ -1,4 +1,9 @@
 import React from 'react'
+import "../assets/css/style.css"
+import "../assets/css/vendor.css"
+import "../assets/css/responsive.css"
+import LoadScripts from './LoadScript'
+
 
 const HomePage = () => {
   return (
@@ -82,10 +87,10 @@ const HomePage = () => {
             <div className="about-area-inner">
                 <div className="row">
                     <div className="col-lg-6">
-                    <div className="about-thumb-wrap left-icon" style={{ backgroundImage: "url('/public/img/banner/2.png')" }}>
-                            <div className="about-icon"><img src="/public/img/icon/4.png" alt="img"/></div>
+                    <div className="about-thumb-wrap left-icon" >
+                            <div className="about-icon"><img src="/public/images/elearning-portals-cover-picture.svg" /></div>
                             <div className="bottom-content">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmo
+                            We uphold high standards of educational excellence to ensure that our learners receive a valuable and rewarding experience
                             </div>
                         </div>
                     </div>
@@ -93,8 +98,8 @@ const HomePage = () => {
                         <div className="about-inner-wrap pl-xl-4 pt-5 pt-lg-0 mt-5 mt-lg-0">  
                             <div className="section-title mb-0">
                                 <h6 className="sub-title right-line">ABOUT US</h6>
-                                <h2 className="title">Strength in Numbers</h2>
-                                <p className="content">The quick, brown fox jumps over a lazy dog. DJs flock by when MTV ax quiz prog. Junk MTV quiz graced by fox whelps. Bawds jog, flick quartz, vex nymphs. Waltz, bad nymph,</p>
+                                <h2 className="title">Our mission</h2>
+                                <p className="content"> Our mission is to break down barriers to education by offering accessible and innovative learning solutions. We strive to empower learners of all backgrounds to achieve their academic and professional goals.</p>
                                 <ul className="single-list-wrap">
                                     <li className="single-list-inner style-check-box-grid">
                                         <div className="media">
@@ -102,8 +107,8 @@ const HomePage = () => {
                                                 <i className="fa fa-check"></i>
                                             </div>
                                             <div className="media-body">
-                                                <h5>Ligula molestie</h5>
-                                                <p>Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod tempor incididunt ut labore</p>
+                                                <h5>Diverse Course Selection</h5>
+                                                <p> Explore a wide range of courses designed to meet the needs of today's learners</p>
                                             </div>
                                         </div>
                                     </li>
@@ -113,8 +118,8 @@ const HomePage = () => {
                                                 <i className="fa fa-check"></i>
                                             </div>
                                             <div className="media-body">
-                                                <h5>Ligula molestie</h5>
-                                                <p>Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod tempor incididunt ut labore</p>
+                                                <h5>Flexible Learning</h5>
+                                                <p>Enjoy the flexibility of online learning with our interactive courses and resources available anytime, anywhere</p>
                                             </div>
                                         </div>
                                     </li>
@@ -1276,10 +1281,15 @@ const HomePage = () => {
             </div>
         </div>
     </div>
+    <LoadScripts/>
+    
+       
+    
     
 
 
     </div>
+    
     
   )
 }

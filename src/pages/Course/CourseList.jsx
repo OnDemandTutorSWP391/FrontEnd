@@ -10,8 +10,9 @@ const CourseList = () => {
       try {
         const response = await getAllCourse();
         console.log(response);
+        if (response.data && response.data.data) {
           setCourses(response.data.data);
-        
+        }
       } catch (error) {
         console.error('Error fetching courses:', error);
       }
@@ -41,42 +42,46 @@ const CourseList = () => {
           <div className="row">
             <div className="col-lg-8 order-lg-12">
               <div className="row">
-                {courses.map(course => (
-                  <div className="col-md-6" key={course.id}>
-                    <div className="single-course-inner">
-                      <div className="thumb">
-                        <img src={course.url} alt="course img" />
-                      </div>
-                      <div className="details">
-                        <div className="details-inner">
-                          <div className="emt-user">
-                            <span className="u-thumb"><img src="assets/img/author/1.png" alt="author img" /></span>
-                            <span className="align-self-center">{course.tutorName}</span>
-                          </div>
-                          <h6>
-                            <Link to={`/course-detail/${course.id}`}>{course.subjectName}</Link>
-                          </h6>
-                          <p>{course.description}</p>
+                {courses.length > 0 ? (
+                  courses.map(course => (
+                    <div className="col-md-6" key={course.id}>
+                      <div className="single-course-inner">
+                        <div className="thumb">
+                          <img src={course.url} alt="course img" />
                         </div>
-                        <div className="emt-course-meta">
-                          <div className="row">
-                            <div className="col-6">
-                              <div className="rating">
-                                <i className="fa fa-star"></i> 4.3
-                                <span>(23)</span>
-                              </div>
+                        <div className="details">
+                          <div className="details-inner">
+                            <div className="emt-user">
+                              <span className="u-thumb"><img src="assets/img/author/1.png" alt="author img" /></span>
+                              <span className="align-self-center">{course.tutorName}</span>
                             </div>
-                            <div className="col-6">
-                              <div className="price text-right">
-                                Price: <span>${course.coin}</span>
+                            <h6>
+                              <Link to={`/course-detail/${course.id}`}>{course.subjectName}</Link>
+                            </h6>
+                            <p>{course.description}</p>
+                          </div>
+                          <div className="emt-course-meta">
+                            <div className="row">
+                              <div className="col-6">
+                                <div className="rating">
+                                  <i className="fa fa-star"></i> 4.3
+                                  <span>(23)</span>
+                                </div>
+                              </div>
+                              <div className="col-6">
+                                <div className="price text-right">
+                                  Price: <span>${course.coin}</span>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p>No courses available.</p>
+                )}
               </div>
               <nav className="td-page-navigation">
                 <ul className="pagination">
@@ -163,6 +168,6 @@ const CourseList = () => {
       </div>
     </div>
   );
-}
+};
 
 export default CourseList;

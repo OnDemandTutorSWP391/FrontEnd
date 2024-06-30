@@ -2,8 +2,9 @@ import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import AdminHeader from "../../components/AdminHeader/AdminHeader";
 import { useEffect, useState } from "react";
-import { getRequestByUser, updateRequestStatus } from "../../service/RequestService";
+import { getRequestByUser, getRequestByUserWithFromDate, getRequestByUserWithFromDatendTodate, getRequestByUserWithSearch, getRequestByUserWithSearchandFromDate, getRequestByUserWithSearchandFromDateToDate, updateRequestStatus } from "../../service/RequestService";
 import { tokens } from "../../theme";
+import { format } from 'date-fns';
 
 const ListRequestByUser = () => {
     const [requests, setRequests] = useState([]);
@@ -16,11 +17,25 @@ const ListRequestByUser = () => {
 
     const fetchRequests = async () => {
         try {
-            const response = await getRequestByUser(pageIndex);
+            let response;
+            const formattedFromDate = fromDate ? format(new Date(fromDate), 'yyyy-MM-dd') : '';
+            const formattedToDate = toDate ? format(new Date(toDate), 'yyyy-MM-dd') : '';
+
+            if (!search && !fromDate && !toDate) {
+                response = await getRequestByUser(pageIndex);
+            } else if (search && !fromDate && !toDate) {
+                response = await getRequestByUserWithSearch(pageIndex, search);
+            } else if (search && fromDate && !toDate) {
+                response = await getRequestByUserWithSearchandFromDate(pageIndex, search, formattedFromDate);
+            } else if (search && fromDate && toDate) {
+                response = await getRequestByUserWithSearchandFromDateToDate(pageIndex, search, formattedFromDate, formattedToDate);
+            } else if (!search && fromDate && !toDate){
+                response = await getRequestByUserWithFromDate( pageIndex, fromDate);
+            } else if (!search && fromDate && toDate){
+                response = await getRequestByUserWithFromDatendTodate(pageIndex, formattedFromDate, formattedToDate);
+            }
             console.log('API response:', response);
-            
-                setRequests(response.data.data);
-            
+            setRequests(response.data.data);
         } catch (error) {
             console.error('Error fetching requests:', error);
             setRequests([]);
@@ -29,7 +44,7 @@ const ListRequestByUser = () => {
 
     useEffect(() => {
         fetchRequests();
-    }, []);
+    }, [pageIndex]);
 
     const handleSearchChange = (event) => setSearch(event.target.value);
     const handleFromDateChange = (event) => setFromDate(event.target.value);
@@ -73,8 +88,8 @@ const ListRequestByUser = () => {
             field: "createdDate",
             headerName: "Created Date",
             flex: 1,
-            type: 'dateTime',
-            valueGetter: ({ value }) => value && new Date(value),
+            // type: 'dateTime',
+            // valueGetter: ({ value }) => value && new Date(value),
         },
         {
             field: "status",

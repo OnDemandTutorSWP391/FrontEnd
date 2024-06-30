@@ -3,6 +3,7 @@ import "../assets/css/color.css"
 import "../assets/css/responsive.css"
 import "../assets/css/style.css"
 import "../assets/css/vendor.css"
+import LoadScripts from '../../pages/HomePage/LoadScript'
 
 const Footer = () => {
     
@@ -110,6 +111,7 @@ const Footer = () => {
                     </div>
                 </div>
             </div>
+            <LoadScripts/>
         </div>
     </footer>
     </>

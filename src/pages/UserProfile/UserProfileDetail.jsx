@@ -11,6 +11,15 @@ const UserProfileDetail = () => {
         fullName: "",
         gender: "",
     });
+    const [formDataUpdate, setDataUpdate] = useState({
+        fullName: "",
+        dob: "",
+        gender: "",
+        avatar: "",
+    })
+    const handleDataChange = (key, value) => {
+        setDataUpdate({ ...formDataUpdate, [key]: value });
+      };
 
     useEffect(() => {
         const getRequestCategories = async () => {
@@ -30,23 +39,30 @@ const UserProfileDetail = () => {
                         <form>
                             <div class="mb-3">
                                 <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on the site)</label>
-                                <input class="form-control" id="inputUsername" type="text" placeholder="Enter your username" value={userProfile.fullName} />
+                                <input class="form-control" id="inputUsername" type="text" placeholder="Enter your username" 
+                                value={userProfile.fullName} 
+                                onChange={(e) => handleDataChange("fullName", e.target.value)}
+                                />
                             </div>
 
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputFirstName">First name</label>
-                                    <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your first name" value={userProfile.fullName.split(' ')[0]} />
+                                    <input class="form-control" id="inputFirstName" type="text" 
+                                    placeholder="Enter your first name" 
+                                    value={userProfile.fullName.split(' ')[0]} 
+                                    onChange={(e) => handleDataChange("dob", e.target.value)}
+                                    />
                                 </div>
                                 <div class="col-md-6">
                                     <label class="small mb-1" for="inputLastName">Last name</label>
-                                    <input class="form-control" id="inputLastName" type="text" placeholder="Enter your last name" value={userProfile.fullName.split(' ').slice(-1).join(' ')} />
+                                    <input class="form-control" id="inputLastName" type="text" placeholder="Enter your Gender" value={userProfile.gender} />
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                                <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value={userProfile.email} />
+                                <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value={userProfile.email} disabled/>
                             </div>
 
                             <div class="row gx-3 mb-3">

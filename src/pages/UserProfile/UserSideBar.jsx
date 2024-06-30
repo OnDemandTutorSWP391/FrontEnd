@@ -130,11 +130,11 @@ const UserSideBar = () => {
                 color={colors.grey[300]}
                 sx={{ m: "15px 0 5px 20px" }}
               >
-                Data
+                Transaction
               </Typography>
               <Item
                 title="Transaction History"
-                to="/admin/manage-account"
+                to="/profile/transaction"
                 icon={<PeopleOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
@@ -146,9 +146,23 @@ const UserSideBar = () => {
                 selected={selected}
                 setSelected={setSelected}
               />
+              <Typography
+                variant="h6"
+                color={colors.grey[300]}
+                sx={{ m: "15px 0 5px 20px" }}
+              >
+                Course
+              </Typography>
+              <Item
+                title="Purchased Course"
+                to="/profile/your-course"
+                icon={<ReceiptOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
               <Item
                 title="Weekly Schedule"
-                to="/invoices"
+                to="/profile/weekly-schedule"
                 icon={<ReceiptOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}

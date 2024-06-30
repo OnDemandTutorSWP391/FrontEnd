@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
@@ -17,6 +17,7 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import { getUserProfile } from '../../service/UserProfileService';
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -35,6 +36,23 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
     );
   };
 const TutorSideBar = () => {
+  const [userProfile, setUserProfile] = useState({
+    avatar: "",
+    createdDate: "",
+    dob: "",
+    email: "",
+    fullName: "",
+    gender: "",
+});
+
+useEffect(() => {
+    const getRequestCategories = async () => {
+      const response = await getUserProfile();
+      console.log('API response:', response);
+      setUserProfile(response.data.data);
+    };
+    getRequestCategories();
+}, []);
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -80,7 +98,7 @@ const TutorSideBar = () => {
                   ml="15px"
                 >
                   <Typography variant="h3" color={colors.grey[100]}>
-                    User Profile
+                    Tutor Profile
                   </Typography>
                   <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
                     <MenuOutlinedIcon />
@@ -106,12 +124,12 @@ const TutorSideBar = () => {
                     color={colors.grey[100]}
                     fontWeight="bold"
                     sx={{ m: "10px 0 0 0" }}
+                    value={userProfile.fullName}
                   >
-                    Ed Roh
+                   Hello, {userProfile.fullName}
+                    
                   </Typography>
-                  <Typography variant="h5" color={colors.greenAccent[500]}>
-                    VP Fancy Admin
-                  </Typography>
+                  
                 </Box>
               </Box>
             )}
@@ -134,7 +152,7 @@ const TutorSideBar = () => {
               </Typography>
               <Item
                 title="Transaction History"
-                to="/admin/manage-account"
+                to="/tutor/transaction"
                 icon={<PeopleOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
@@ -155,7 +173,14 @@ const TutorSideBar = () => {
               />
               <Item
                 title="Weekly Schedule"
-                to="/invoices"
+                to="/tutor/schedule"
+                icon={<ReceiptOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Student List"
+                to="/tutor/studentlist"
                 icon={<ReceiptOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}

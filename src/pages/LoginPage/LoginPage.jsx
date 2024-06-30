@@ -12,6 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const LoginPage = () => {
   const { setToken, setRefreshToken, isLoggedIn } = useStore();
   const navigate = useNavigate();
+  const [isLogged, setLogged] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -34,14 +35,15 @@ const LoginPage = () => {
       const {accessToken, refreshToken}  = data.data;
       console.log(`${data.data.accessToken}`);
   
-      // localStorage.setItem("accessToken", accessToken);
-      // localStorage.setItem("refreshToken", refreshToken);
+      
       setToken(accessToken) // Update the token in the Zustand store
       setRefreshToken(refreshToken);
       useStore.getState().setRef
       console.log(accessToken);
       if (isLoggedIn()) {
+        
         navigate("/");
+
         toast.success("Login success!");
       }else {
         toast.error("error")

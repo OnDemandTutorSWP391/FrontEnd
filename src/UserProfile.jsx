@@ -11,6 +11,10 @@ import UserSideBar from './pages/UserProfile/UserSideBar';
 import UserTopBar from './pages/UserProfile/UserTopBar';
 import UserProfileDetail from './pages/UserProfile/UserProfileDetail';
 import ListRequestByUser from './pages/UserProfile/ListRequestByUser';
+import UserTransactions from './pages/UserProfile/UserTransactions';
+import ListCoursePurchased from './pages/UserProfile/ListCoursePurchased';
+
+import StudentSchedule from './pages/UserProfile/ListScheduleStudent';
 const UserProfile = () => {
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
@@ -26,6 +30,9 @@ const UserProfile = () => {
               <Routes>
                 <Route path="/" element={<UserProfileDetail />} />
                 <Route path="/user-ticket-list" element={<ListRequestByUser />} />
+                <Route path="/transaction" element={<UserTransactions/>}/>
+                <Route path="/your-course" element={<ListCoursePurchased/>}/>
+                <Route path="/weekly-schedule" element={<StudentSchedule/>}/>
                 
               </Routes>
             </main>
