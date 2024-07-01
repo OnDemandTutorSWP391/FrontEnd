@@ -6,7 +6,8 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AdminHeader from "../../components/AdminHeader/AdminHeader";
 import { axiosClient } from "../../axios/AxiosClient";
 
-const WeeklySchedule = () => {
+
+const StudentJoinManager = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [studentJoins, setStudentJoins] = useState([]);
@@ -167,4 +168,4 @@ const WeeklySchedule = () => {
   );
 };
 
-export default WeeklySchedule;
+export default StudentJoinManager;

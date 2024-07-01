@@ -6,6 +6,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AdminHeader from "../../components/AdminHeader/AdminHeader";
 import { axiosClient } from "../../axios/AxiosClient";
 
+
 const WeeklySchedule = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
