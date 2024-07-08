@@ -2,17 +2,36 @@ import React, { useEffect, useState } from 'react'
 import { getCourseById, postBuyCourseForStudent } from '../../service/CourseService';
 import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { axiosClient } from '../../axios/AxiosClient';
+
 
 const CourseDetail = () => {
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);
-  
+  const [tutorAvatar, setTutorAvatar] = useState(null);
+
+  const fetchTutorAvatar = async (tutorName) => {
+    try {
+      const response = await axiosClient.get(`/Tutors/get-all-tutors-for-student?search=${tutorName}`);
+      
+      console.log(response);
+      if (response.data.success && response.data.data.length > 0) {
+        setTutorAvatar(response.data.data[0].avatar);
+        console.log(setTutorAvatar);
+      }
+    } catch (error) {
+      console.error('Error fetching tutor avatar:', error);
+    }
+  };
   useEffect(() => {
     const fetchCourse = async () => {
       try {
         const response = await getCourseById(courseId);
-        console.log(response);
+       
           setCourse(response.data.data);
+          if (response.data.data && response.data.data.tutorName) {
+            fetchTutorAvatar(response.data.data.tutorName);
+          }
         
       } catch (error) {
         console.error('Error fetching course details:', error);
@@ -21,6 +40,7 @@ const CourseDetail = () => {
 
     fetchCourse();
   }, [courseId]);
+  
   if (!course) {
     return <div>Loading...</div>; // Add loading indicator while fetching data
   }
@@ -58,14 +78,16 @@ const CourseDetail = () => {
                 <div className="col-lg-8">
                     <div className="course-course-detaila-inner">
                         <div className="details-inner">
-                            <div className="emt-user">
-                                <span className="u-thumb"><img src="assets/img/author/1.png" alt="img"/></span>
-                                <span className="align-self-center">{course.tutorName}</span>
-                            </div>
+                        <div className="emt-user">
+        <span className="u-thumb">
+          <img src={tutorAvatar || "assets/img/author/1.png"} alt="tutor avatar"/>
+        </span>
+        <span className="align-self-center">{course.tutorName}</span>
+      </div>
                             <h3 className="title">{course.tutorName}</h3>
                         </div>
                         <div className="thumb">
-                            <img src="assets/img/course/9.png" alt="img"/>
+                            <img src={course.image} alt="img"/>
                         </div>
                         <div className="course-details-nav-tab text-center">
                             <ul className="nav nav-tabs" id="myTab" role="tablist">

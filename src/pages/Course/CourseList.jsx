@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { getAllCourse } from '../../service/CourseService';
 import { Link } from 'react-router-dom';
+import { axiosClient } from '../../axios/AxiosClient';
 
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
+  const [tutorInfo, setTutorInfo] = useState({});
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const response = await getAllCourse();
-        console.log(response);
+        console.log('Courses response:', response);
         if (response.data && response.data.data) {
           setCourses(response.data.data);
         }
@@ -20,6 +22,37 @@ const CourseList = () => {
 
     fetchCourses();
   }, []);
+
+  useEffect(() => {
+    const fetchTutors = async () => {
+      if (courses.length > 0) {
+        try {
+          // Lấy danh sách tên tutor duy nhất
+          const uniqueTutorNames = [...new Set(courses.map(course => course.tutorName))];
+          
+          // Tạo một object để lưu trữ thông tin tutor
+          let tutorInfoMap = {};
+
+          // Gọi API cho từng tên tutor
+          for (const tutorName of uniqueTutorNames) {
+            const response = await axiosClient.get(`/Tutors/get-all-tutors-for-student?search=${tutorName}`);
+            console.log(`Response for ${tutorName}:`, response);
+            
+            if (response.data.success && response.data.data.length > 0) {
+              // Giả sử API trả về một mảng, chúng ta lấy phần tử đầu tiên
+              tutorInfoMap[tutorName] = response.data.data[0];
+            }
+          }
+
+          setTutorInfo(tutorInfoMap);
+        } catch (error) {
+          console.error('Error fetching tutors:', error);
+        }
+      }
+    };
+
+    fetchTutors();
+  }, [courses]);
 
   return (
     <div>
@@ -47,13 +80,21 @@ const CourseList = () => {
                     <div className="col-md-6" key={course.id}>
                       <div className="single-course-inner">
                         <div className="thumb">
-                          <img src={course.url} alt="course img" />
+                          <img src={course.image} alt="course img" />
                         </div>
                         <div className="details">
                           <div className="details-inner">
                             <div className="emt-user">
-                              <span className="u-thumb"><img src="assets/img/author/1.png" alt="author img" /></span>
+                              <span className="u-thumb">
+                                <img 
+                                  src={tutorInfo[course.tutorName]?.avatar} 
+                                  alt={`${course.tutorName}'s avatar`} 
+                                />
+                              </span>
                               <span className="align-self-center">{course.tutorName}</span>
+                              <span className="tutor-info">
+                                {tutorInfo[course.tutorName]?.workPlace}
+                              </span>
                             </div>
                             <h6>
                               <Link to={`/course-detail/${course.id}`}>{course.subjectName}</Link>
@@ -64,8 +105,8 @@ const CourseList = () => {
                             <div className="row">
                               <div className="col-6">
                                 <div className="rating">
-                                  <i className="fa fa-star"></i> 4.3
-                                  <span>(23)</span>
+                                  <i className="fa fa-star"></i> {tutorInfo[course.tutorName]?.averageStar || 'N/A'}
+                                  <span>({tutorInfo[course.tutorName]?.totalReviews || 0})</span>
                                 </div>
                               </div>
                               <div className="col-6">
@@ -104,7 +145,7 @@ const CourseList = () => {
                   </form>
                 </div>
                 <div className="widget widget_catagory">
-                  <h4 className="widget-title">Catagory</h4>
+                  <h4 className="widget-title">Category</h4>
                   <ul className="catagory-items">
                     <li><a href="#">Tempor lorem interdum <i className="fa fa-caret-right"></i></a></li>
                     <li><a href="#">Auctor mattis lacus <i className="fa fa-caret-right"></i></a></li>
@@ -115,7 +156,7 @@ const CourseList = () => {
                 <div className="widget widget_checkbox_list">
                   <h4 className="widget-title">Price</h4>
                   <label className="single-checkbox">
-                    <input type="checkbox" checked="checked" />
+                    <input type="checkbox" defaultChecked />
                     <span className="checkmark"></span>
                     Free Courses
                   </label>
@@ -133,7 +174,7 @@ const CourseList = () => {
                 <div className="widget widget_checkbox_list">
                   <h4 className="widget-title">Level</h4>
                   <label className="single-checkbox">
-                    <input type="checkbox" checked="checked" />
+                    <input type="checkbox" defaultChecked />
                     <span className="checkmark"></span>
                     Beginner
                   </label>

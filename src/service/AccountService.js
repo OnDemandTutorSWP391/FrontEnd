@@ -18,4 +18,7 @@ const postForgetPassword = async (formData) => {
 const postResetPassword = async (formData) => {
   return await axiosClient.post("/Users/ResetPassword", formData)
 }
- export { postLogin, getUserProfile, postRegister, postForgetPassword, postResetPassword };
+const updateUserProfile = async (userData) => {
+  return await axiosClient.put(`/Users/UpdateUserProfile`, userData);
+};
+ export { postLogin, getUserProfile, postRegister, postForgetPassword, postResetPassword, updateUserProfile };

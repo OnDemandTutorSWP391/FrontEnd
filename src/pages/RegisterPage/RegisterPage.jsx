@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { postRegister } from '../../service/AccountService';
 import { ToastContainer, toast } from 'react-toastify'; // Make sure to install and import react-toastify
 import { useNavigate } from 'react-router-dom';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../../firebase';
+
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -16,14 +19,28 @@ const RegisterPage = () => {
     avatar: "",
     role: "",
   });
+  const [avatarFile, setAvatarFile] = useState(null); // Thêm state cho file avatar
   const navigate = useNavigate();
 
   const handleDataChange = (key, value) => {
     setFormData({ ...formData, [key]: value });
   };
 
+  const handleAvatarChange = (e) => {
+    if (e.target.files[0]) {
+      setAvatarFile(e.target.files[0]);
+    }
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault(); // Prevent the default form submission behavior
+
+    if (avatarFile) {
+      const storageRef = ref(storage, `avatars/${avatarFile.name}`);
+      const snapshot = await uploadBytes(storageRef, avatarFile);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      formData.avatar = downloadURL; // Lưu URL của ảnh vào formData
+    }
 
     const response = await postRegister(formData); // Use formData directly
     console.log(response);
@@ -106,7 +123,7 @@ const RegisterPage = () => {
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
-                      <input type="text" placeholder="Avatar URL" onChange={(e) => handleDataChange("avatar", e.target.value)} />
+                      <input type="file" placeholder="Avatar" onChange={handleAvatarChange} />
                     </div>
                   </div>
                   <div className="col-12">
@@ -120,7 +137,7 @@ const RegisterPage = () => {
                   </div>
                   <div className="col-12 mb-4">
                     <button className="btn btn-base w-100" type="submit">Create Account</button>
-                    <ToastContainer/>
+                    <ToastContainer />
                   </div>
                   <div className="col-12">
                     <span>By creating an account</span>

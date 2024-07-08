@@ -114,7 +114,7 @@ useEffect(() => {
                     alt="profile-user"
                     width="100px"
                     height="100px"
-                    src={`../../assets/user.png`}
+                    src={userProfile.avatar}
                     style={{ cursor: "pointer", borderRadius: "50%" }}
                   />
                 </Box>

@@ -20,6 +20,8 @@ import NotFound from './pages/404NotFound/NotFound.jsx';
 import PrivateRoute from './pages/PrivateRoute/PrivateRoute.jsx';
 import Moderator from './Moderator.jsx';
 import PaymentResult from './pages/CoinDeposit/PaymentResult.jsx';
+import TutorList from './pages/TutorList/TutorList.jsx';
+import TutorDetail from './pages/TutorDetail/TutorDetail.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
@@ -36,8 +38,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="create-request" element={<CreateRequest />} />
           <Route path="course-list" element={<CourseList />} />
           <Route path="course-detail/:courseId" element={<CourseDetail />} />
+          <Route path="tutor-detail/:tutorId" element={<TutorDetail />} />
           <Route path="coin-deposit" element={<CoinDeposit />} />
           <Route path="payment-result" element={<PaymentResult />} />
+          <Route path="tutor-list" element={<TutorList />} />
           
         </Route>
       </Route>
