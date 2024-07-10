@@ -17,6 +17,8 @@ import TutorTransaction from './pages/TutorPage/TutorTransaction';
 import TutorSchedule from './pages/TutorPage/Timesfortutor';
 import StudentList from './pages/TutorPage/ListStudentTutor';
 import RegisterSubjectLevel from './pages/TutorPage/RegisterSubjectLevel';
+import TutorRatings from './pages/TutorPage/TutorRatings';
+import TutorSubjects from './pages/Moderator/TutorSubjects';
 
 const Tutor = () => {
     const [theme, colorMode] = useMode();
@@ -39,6 +41,8 @@ const Tutor = () => {
                 <Route path='/schedule' element={<TutorSchedule/>}/>
                 <Route path='/studentlist' element={<StudentList/>}/>
                 <Route path='/register-subject-level' element={<RegisterSubjectLevel/>}/>
+                <Route path='/my-rating' element={<TutorRatings/>}/>
+                <Route path='/my-subject-level' element={<TutorSubjects/>}/>
               </Routes>
             </main>
           </div>

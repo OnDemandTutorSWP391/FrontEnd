@@ -15,6 +15,7 @@ import UserTransactions from './pages/UserProfile/UserTransactions';
 import ListCoursePurchased from './pages/UserProfile/ListCoursePurchased';
 
 import StudentSchedule from './pages/UserProfile/ListScheduleStudent';
+import StudentRatings from './pages/UserProfile/StudentRatings';
 const UserProfile = () => {
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
@@ -33,7 +34,7 @@ const UserProfile = () => {
                 <Route path="/transaction" element={<UserTransactions/>}/>
                 <Route path="/your-course" element={<ListCoursePurchased/>}/>
                 <Route path="/weekly-schedule" element={<StudentSchedule/>}/>
-                
+                <Route path="/rating-history" element={<StudentRatings/>}/>
               </Routes>
             </main>
           </div>

@@ -1281,7 +1281,7 @@ const HomePage = () => {
             </div>
         </div>
     </div>
-    <LoadScripts/>
+    {/* <LoadScripts/> */}
     
        
     

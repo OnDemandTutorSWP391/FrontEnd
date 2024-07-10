@@ -165,6 +165,13 @@ const UserSideBar = () => {
                 selected={selected}
                 setSelected={setSelected}
               />
+              <Item
+                title="Rating History"
+                to="/profile/rating-history"
+                icon={<ContactsOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
               <Typography
                 variant="h6"
                 color={colors.grey[300]}

@@ -172,6 +172,34 @@ useEffect(() => {
                 setSelected={setSelected}
               />
               <Item
+                title="My Rating"
+                to="/tutor/my-rating"
+                icon={<ContactsOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Create Subject Level"
+                to="/tutor/register-subject-level"
+                icon={<ContactsOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Create Time For Student"
+                to="/tutor/create-time"
+                icon={<ContactsOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
+                title="Manage Subject Level"
+                to="/tutor/my-subject-level"
+                icon={<ContactsOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
                 title="Weekly Schedule"
                 to="/tutor/schedule"
                 icon={<ReceiptOutlinedIcon />}

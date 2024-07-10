@@ -155,6 +155,13 @@ const ModSideBar = () => {
                 selected={selected}
                 setSelected={setSelected}
               />
+              <Item
+                title="Manage Rating"
+                to="/moderator/manage-rating"
+                icon={<ReceiptOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
               
   
               

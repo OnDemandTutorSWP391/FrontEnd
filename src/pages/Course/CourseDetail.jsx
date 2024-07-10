@@ -5,11 +5,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import { axiosClient } from '../../axios/AxiosClient';
 
 
+
 const CourseDetail = () => {
   const { courseId } = useParams();
   const [course, setCourse] = useState(null);
   const [tutorAvatar, setTutorAvatar] = useState(null);
-
+  const [ratings, setRatings] = useState([]);
   const fetchTutorAvatar = async (tutorName) => {
     try {
       const response = await axiosClient.get(`/Tutors/get-all-tutors-for-student?search=${tutorName}`);
@@ -23,6 +24,17 @@ const CourseDetail = () => {
       console.error('Error fetching tutor avatar:', error);
     }
   };
+  const fetchRatings = async (tutorId) => {
+    try {
+      const response = await axiosClient.get(`/Ratings/get-ratings-by-tutor-id?tutorId=${tutorId}`);
+      console.log(response);
+      if (response.data.success) {
+        setRatings(response.data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching ratings:', error);
+    }
+  };
   useEffect(() => {
     const fetchCourse = async () => {
       try {
@@ -31,6 +43,7 @@ const CourseDetail = () => {
           setCourse(response.data.data);
           if (response.data.data && response.data.data.tutorName) {
             fetchTutorAvatar(response.data.data.tutorName);
+            fetchRatings(response.data.data.tutorId);
           }
         
       } catch (error) {
@@ -55,6 +68,20 @@ const CourseDetail = () => {
         toast.success("success")
     }
    
+  };
+  const calculateAverageRating = () => {
+    if (ratings.length === 0) return 0;
+    const sum = ratings.reduce((acc, rating) => acc + rating.star, 0);
+    return (sum / ratings.length).toFixed(1);
+  };
+
+  const countRatings = (star) => {
+    return ratings.filter(rating => rating.star === star).length;
+  };
+
+  const calculatePercentage = (count) => {
+    if (ratings.length === 0) return 0;
+    return ((count / ratings.length) * 100).toFixed(0);
   };
   return (
     <div>
@@ -316,86 +343,38 @@ const CourseDetail = () => {
                                 <div className="ratings-list-inner mb-4">
                                     <div className="row">
                                         <div className="col-md-4 align-self-center text-center">
-                                            <div className="total-avarage-rating">
-                                                <h2>5.0</h2>
-                                                <div className="rating-inner">
-                                                    <i className="fa fa-star"></i>
-                                                    <i className="fa fa-star"></i>
-                                                    <i className="fa fa-star"></i>
-                                                    <i className="fa fa-star"></i>
-                                                    <i className="fa fa-star"></i>
-                                                </div>
-                                                <p>Rated 5 out of 3 Ratings</p>
-                                            </div>
+                                        <div className="total-avarage-rating">
+                            <h2>{calculateAverageRating()}</h2>
+                            <div className="rating-inner">
+                              {[1, 2, 3, 4, 5].map((star) => (
+                                <i key={star} className={`fa fa-star${star <= calculateAverageRating() ? '' : '-o'}`}></i>
+                              ))}
+                            </div>
+                            <p>Rated {calculateAverageRating()} out of {ratings.length} Ratings</p>
+                          </div>
                                         </div>
                                         <div className="col-md-8">
-                                            <ul>
-                                                <li>
-                                                    <a href="#">
-                                                        <span className="counter-label"><i className="fa fa-star"></i>5</span>
-                                                        <span className="progress-bar-inner">
-                                                            <span className="progress">
-                                                                <span className="progress-bar" role="progressbar"
-                                                                    aria-valuenow="100" aria-valuemin="0"
-                                                                    aria-valuemax="100" style={{ width: '100%' }}></span>
-                                                            </span>
-                                                        </span>
-                                                        <span className="counter-count">100%</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">
-                                                        <span className="counter-label"><i className="fa fa-star"></i>4</span>
-                                                        <span className="progress-bar-inner">
-                                                            <span className="progress">
-                                                                <span className="progress-bar" role="progressbar"
-                                                                    aria-valuenow="80" aria-valuemin="0"
-                                                                    aria-valuemax="100" style={{ width: '0%' }}></span>
-                                                            </span>
-                                                        </span>
-                                                        <span className="counter-count">0%</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">
-                                                        <span className="counter-label"><i className="fa fa-star"></i>3</span>
-                                                        <span className="progress-bar-inner">
-                                                            <span className="progress">
-                                                                <span className="progress-bar" role="progressbar"
-                                                                    aria-valuenow="0" aria-valuemin="0"
-                                                                    aria-valuemax="100" style={{ width: '0%' }}></span>
-                                                            </span>
-                                                        </span>
-                                                        <span className="counter-count">0%</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">
-                                                        <span className="counter-label"><i className="fa fa-star"></i>2</span>
-                                                        <span className="progress-bar-inner">
-                                                            <span className="progress">
-                                                                <span className="progress-bar" role="progressbar"
-                                                                    aria-valuenow="0" aria-valuemin="0"
-                                                                    aria-valuemax="100" style={{ width: '0%' }}></span>
-                                                            </span>
-                                                        </span>
-                                                        <span className="counter-count">0%</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="#">
-                                                        <span className="counter-label"><i className="fa fa-star"></i>1</span>
-                                                        <span className="progress-bar-inner">
-                                                            <span className="progress">
-                                                                <span className="progress-bar" role="progressbar"
-                                                                    aria-valuenow="0" aria-valuemin="0"
-                                                                    aria-valuemax="100" style={{ width: '0%' }}></span>
-                                                            </span>
-                                                        </span>
-                                                        <span className="counter-count">0%</span>
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                        <ul>
+                            {[5, 4, 3, 2, 1].map((star) => {
+                              const count = countRatings(star);
+                              const percentage = calculatePercentage(count);
+                              return (
+                                <li key={star}>
+                                  <a href="#">
+                                    <span className="counter-label"><i className="fa fa-star"></i>{star}</span>
+                                    <span className="progress-bar-inner">
+                                      <span className="progress">
+                                        <span className="progress-bar" role="progressbar"
+                                          aria-valuenow={percentage} aria-valuemin="0"
+                                          aria-valuemax="100" style={{ width: `${percentage}%` }}></span>
+                                      </span>
+                                    </span>
+                                    <span className="counter-count">{percentage}%</span>
+                                  </a>
+                                </li>
+                              );
+                            })}
+                          </ul>
                                         </div>
                                     </div>
                                 </div>

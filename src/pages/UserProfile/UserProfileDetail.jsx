@@ -1,137 +1,195 @@
 import React, { useEffect, useState } from 'react';
-import "../UserProfile/user.css";
-import { getUserProfile } from '../../service/UserProfileService'; // Add the updateUserProfile service
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Container,
+  Grid,
+  Paper,
+  Snackbar,
+  Alert,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
+} from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { getUserProfile } from '../../service/UserProfileService';
 import { storage } from '../../firebase';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import AdminHeader from "../../components/AdminHeader/AdminHeader";
 import { updateUserProfile } from '../../service/AccountService';
 
-
 const UserProfileDetail = () => {
-    const [userProfile, setUserProfile] = useState({
-        avatar: "",
-        createdDate: "",
-        dob: "",
-        email: "",
-        fullName: "",
-        gender: "",
-    });
-    const [formDataUpdate, setDataUpdate] = useState({
-        fullName: "",
-        dob: "",
-        gender: "",
-        avatar: "",
-    });
-    const [avatarFile, setAvatarFile] = useState(null); // State for handling avatar file
+  const [userProfile, setUserProfile] = useState({
+    avatar: "",
+    createdDate: "",
+    dob: null,
+    email: "",
+    fullName: "",
+    gender: "",
+  });
+  const [formDataUpdate, setDataUpdate] = useState({
+    fullName: "",
+    dob: null,
+    gender: "",
+    avatar: "",
+  });
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success"
+  });
 
-    const handleDataChange = (key, value) => {
-        setDataUpdate({ ...formDataUpdate, [key]: value });
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await getUserProfile();
+        const profileData = response.data.data;
+        setUserProfile(profileData);
+        setDataUpdate({
+          fullName: profileData.fullName,
+          dob: new Date(profileData.dob),
+          gender: profileData.gender,
+          avatar: profileData.avatar,
+        });
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        showSnackbar("Error fetching user profile. Please try again.", "error");
+      }
     };
+    fetchUserProfile();
+  }, []);
 
-    const handleFileChange = (e) => {
-        setAvatarFile(e.target.files[0]);
-    };
+  const handleDataChange = (key, value) => {
+    setDataUpdate({ ...formDataUpdate, [key]: value });
+  };
 
-    const handleSaveChanges = async () => {
-        try {
-            let avatarUrl = userProfile.avatar;
-            if (avatarFile) {
-                const avatarRef = ref(storage, `avatars/${avatarFile.name}`);
-                await uploadBytes(avatarRef, avatarFile);
-                avatarUrl = await getDownloadURL(avatarRef);
-            }
+  const handleFileChange = (e) => {
+    setAvatarFile(e.target.files[0]);
+  };
 
-            const updatedData = {
-                ...formDataUpdate,
-                avatar: avatarUrl,
-                dob: new Date(formDataUpdate.dob).toISOString()
-            };
+  const handleSaveChanges = async () => {
+    try {
+      let avatarUrl = userProfile.avatar;
+      if (avatarFile) {
+        const avatarRef = ref(storage, `avatars/${avatarFile.name}`);
+        await uploadBytes(avatarRef, avatarFile);
+        avatarUrl = await getDownloadURL(avatarRef);
+      }
 
-            await updateUserProfile(updatedData); // Call the API to update user profile
-            alert('Profile updated successfully!');
-        } catch (error) {
-            console.error('Error updating profile:', error);
-            alert('Failed to update profile.');
-        }
-    };
+      const updatedData = {
+        ...formDataUpdate,
+        avatar: avatarUrl,
+        dob: formDataUpdate.dob.toISOString()
+      };
 
-    useEffect(() => {
-        const getRequestCategories = async () => {
-            const response = await getUserProfile();
-            setUserProfile(response.data.data);
-            setDataUpdate({
-                fullName: response.data.data.fullName,
-                dob: response.data.data.dob,
-                gender: response.data.data.gender,
-                avatar: response.data.data.avatar,
-            });
-        };
-        getRequestCategories();
-    }, []);
+      await updateUserProfile(updatedData);
+      showSnackbar('Profile updated successfully!', 'success');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      showSnackbar('Failed to update profile.', 'error');
+    }
+  };
 
-    return (
-        <div>
-            <div className="col-xl-8">
-                <div className="card mb-4">
-                    <div className="card-header">Account Details</div>
-                    <div className="card-body">
-                        <form>
-                            <div className="mb-3">
-                                <label className="small mb-1" htmlFor="inputUsername">Username (how your name will appear to other users on the site)</label>
-                                <input className="form-control" id="inputUsername" type="text" placeholder="Enter your username" 
-                                    value={formDataUpdate.fullName} 
-                                    onChange={(e) => handleDataChange("fullName", e.target.value)}
-                                />
-                            </div>
+  const showSnackbar = (message, severity) => {
+    setSnackbar({ open: true, message, severity });
+  };
 
-                            <div className="row gx-3 mb-3">
-                                <div className="col-md-6">
-                                    <label className="small mb-1" htmlFor="inputFirstName">First name</label>
-                                    <input className="form-control" id="inputFirstName" type="text" 
-                                        placeholder="Enter your first name" 
-                                        value={formDataUpdate.fullName.split(' ')[0]} 
-                                        onChange={(e) => handleDataChange("fullName", `${e.target.value} ${formDataUpdate.fullName.split(' ').slice(1).join(' ')}`)}
-                                    />
-                                </div>
-                                
-                            </div>
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbar({ ...snackbar, open: false });
+  };
 
-                            <div className="mb-3">
-                                <label className="small mb-1" htmlFor="inputEmailAddress">Email address</label>
-                                <input className="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value={userProfile.email} disabled/>
-                            </div>
-
-                            <div className="row gx-3 mb-3">
-                                <div className="col-md-6">
-                                    <label className="small mb-1" htmlFor="inputBirthday">Birthday</label>
-                                    <input className="form-control" id="inputBirthday" type="date" name="birthday" 
-                                        placeholder="Enter your birthday" 
-                                        value={formDataUpdate.dob} 
-                                        onChange={(e) => handleDataChange("dob", e.target.value)}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="mb-3">
-                                <label className="small mb-1" htmlFor="inputGender">Gender</label>
-                                <input className="form-control" id="inputGender" type="text" 
-                                    placeholder="Enter your gender" 
-                                    value={formDataUpdate.gender} 
-                                    onChange={(e) => handleDataChange("gender", e.target.value)}
-                                />
-                            </div>
-
-                            <div className="mb-3">
-                                <label className="small mb-1" htmlFor="inputAvatar">Avatar</label>
-                                <input className="form-control" id="inputAvatar" type="file" onChange={handleFileChange} />
-                            </div>
-
-                            <button className="btn btn-primary" type="button" onClick={handleSaveChanges}>Save changes</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+  return (
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Box m="20px">
+        <AdminHeader title="User Profile" subtitle="Manage Your Account Details" />
+        <Container maxWidth="md">
+          <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
+            <Typography variant="h6" gutterBottom>
+              Account Details
+            </Typography>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Full Name"
+                  value={formDataUpdate.fullName}
+                  onChange={(e) => handleDataChange("fullName", e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Email"
+                  value={userProfile.email}
+                  disabled
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <DatePicker
+                  label="Birthday"
+                  value={formDataUpdate.dob}
+                  onChange={(newValue) => handleDataChange("dob", newValue)}
+                  renderInput={(params) => <TextField {...params} fullWidth />}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel>Gender</InputLabel>
+                  <Select
+                    value={formDataUpdate.gender}
+                    onChange={(e) => handleDataChange("gender", e.target.value)}
+                  >
+                    <MenuItem value="Male">Male</MenuItem>
+                    <MenuItem value="Female">Female</MenuItem>
+                    <MenuItem value="Other">Other</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <input
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  id="raised-button-file"
+                  type="file"
+                  onChange={handleFileChange}
+                />
+                <label htmlFor="raised-button-file">
+                  <Button variant="contained" component="span">
+                    Upload Avatar
+                  </Button>
+                </label>
+                {avatarFile && <Typography variant="body2">{avatarFile.name}</Typography>}
+              </Grid>
+              <Grid item xs={12}>
+                <Button variant="contained" color="primary" onClick={handleSaveChanges}>
+                  Save Changes
+                </Button>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Container>
+      </Box>
+      <Snackbar 
+        open={snackbar.open} 
+        autoHideDuration={6000} 
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
+    </LocalizationProvider>
+  );
 };
 
 export default UserProfileDetail;

@@ -9,7 +9,6 @@ import { getUserProfile } from '../../service/AccountService';
 import { getUserCoin as fetchUserCoin } from '../../service/CoinService';
 import LoadScripts from '../../pages/HomePage/LoadScript';
 
-
 const Header = () => {
     const { setToken, setRefreshToken, isLoggedIn, user, clearToken } = useStore();
     const [userProfile, setUserProfile] = useState({
@@ -42,11 +41,27 @@ const Header = () => {
         if (isLoggedIn()) {
             const fetchCoin = async () => {
                 const response = await fetchUserCoin();
-                setUserCoin(response.data.data); // Assuming 'coins' is the property you need
+                setUserCoin(response.data.data);
             };
             fetchCoin();
         }
     }, [isLoggedIn()]);
+
+    const getUserLink = () => {
+        const role = user['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+        switch (role) {
+            case 'Student':
+                return '/profile';
+            case 'Tutor':
+                return '/tutor';
+            case 'Moderator':
+                return '/moderator';
+            case 'Admin':
+                return '/admin';
+            default:
+                return '/profile';
+        }
+    };
 
     return (
         <header>
@@ -92,12 +107,11 @@ const Header = () => {
                         <div className="nav-right-part nav-right-part-mobile">
                             {isLoggedIn() ? (
                                 <div>
-                                    <a href="/profile">Welcome, {userProfile.fullName}</a>
+                                    <a href={getUserLink()}>Welcome, {userProfile.fullName}</a>
                                     <img src={userProfile.avatar} alt="User Avatar" style={{ width: '50px', borderRadius: '50%' }} />
                                     <p> Coin: {userCoin}</p>
                                     <button className="btn btn-base" onClick={clearToken}>Logout</button>
                                 </div>
-
                             ) : (
                                 <>
                                     <a className="signin-btn" href="/login">Sign In</a>
@@ -113,7 +127,6 @@ const Header = () => {
                                     <a href="#">Home</a>
                                     <ul className="sub-menu">
                                         <li><a href="/">Home</a></li>
-
                                     </ul>
                                 </li>
                                 <li className="menu-item-has-children">
@@ -126,7 +139,6 @@ const Header = () => {
                                     <a href="#">Deposit</a>
                                     <ul className="sub-menu">
                                         <li><a href="/coin-deposit">Coin Deposit</a></li>
-
                                     </ul>
                                 </li>
                                 <li className="menu-item-has-children">
@@ -143,7 +155,7 @@ const Header = () => {
                         <div className="nav-right-part nav-right-part-desktop">
                             {isLoggedIn() ? (
                                 <div>
-                                    <a href="/profile">Welcome, {userProfile.fullName}</a>
+                                    <a href={getUserLink()}>Welcome, {userProfile.fullName}</a>
                                     <img src={userProfile.avatar} alt="User Avatar" style={{ width: '50px', borderRadius: '50%' }} />
                                     <p> Coin: {userCoin}</p>
                                     <button className="btn btn-base" onClick={clearToken}>Logout</button>
