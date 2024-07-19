@@ -19,6 +19,7 @@ import StudentList from './pages/TutorPage/ListStudentTutor';
 import RegisterSubjectLevel from './pages/TutorPage/RegisterSubjectLevel';
 import TutorRatings from './pages/TutorPage/TutorRatings';
 import TutorSubjects from './pages/Moderator/TutorSubjects';
+import TransferCoinsToTutor from './pages/TutorPage/TransferCoinsToTutor';
 
 const Tutor = () => {
     const [theme, colorMode] = useMode();
@@ -43,6 +44,7 @@ const Tutor = () => {
                 <Route path='/register-subject-level' element={<RegisterSubjectLevel/>}/>
                 <Route path='/my-rating' element={<TutorRatings/>}/>
                 <Route path='/my-subject-level' element={<TutorSubjects/>}/>
+                <Route path='/transfer-coin' element={<TransferCoinsToTutor/>}/>
               </Routes>
             </main>
           </div>

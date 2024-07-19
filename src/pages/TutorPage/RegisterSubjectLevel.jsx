@@ -21,7 +21,7 @@ const RegisterSubjectLevel = () => {
   const [subjectLevel, setSubjectLevel] = useState({
     levelId: '',
     subjectId: '',
-    tutorId: '',
+    tutorId: '1',
     name: '',
     description: '',
     url: '',
@@ -174,7 +174,7 @@ const RegisterSubjectLevel = () => {
             fullWidth
             margin="normal"
             label="URL"
-            type="url"
+            type="text"
             value={subjectLevel.url}
             onChange={(e) => handleDataChange("url", e.target.value)}
             required
@@ -190,6 +190,7 @@ const RegisterSubjectLevel = () => {
             required
           />
 
+          
           <TextField
             fullWidth
             margin="normal"

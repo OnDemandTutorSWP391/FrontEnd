@@ -17,6 +17,8 @@ import ModeratorSubjects from './pages/Moderator/ModeratorSubjects';
 import SubjectLevelList from './pages/Moderator/ManageSubjectLevel';
 import RequestCategoryList from './pages/Moderator/ListRequestCategory';
 import ModeratorRatings from './pages/Moderator/ModeratorRatings';
+import TutorList from './pages/TutorList/TutorList';
+import TutorList12 from './pages/Moderator/TutorList';
 const Moderator = () => {
     const [theme, colorMode] = useMode();
     const [isSidebar, setIsSidebar] = useState(true);
@@ -39,6 +41,7 @@ const Moderator = () => {
                  <Route path="/list-subjectLevel" element={<SubjectLevelList />} /> 
                  <Route path="/list-RequestCategory" element={<RequestCategoryList />} /> 
                  <Route path="/manage-rating" element={<ModeratorRatings />} /> 
+                 <Route path="/tutor-list" element={<TutorList12 />} /> 
                 
               </Routes>
             </main>

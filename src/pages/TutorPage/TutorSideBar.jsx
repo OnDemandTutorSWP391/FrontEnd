@@ -186,6 +186,13 @@ useEffect(() => {
                 setSelected={setSelected}
               />
               <Item
+                title="TransferCoin"
+                to="/tutor/transfer-coin"
+                icon={<ContactsOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+              <Item
                 title="Create Time For Student"
                 to="/tutor/create-time"
                 icon={<ContactsOutlinedIcon />}

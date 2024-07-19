@@ -99,7 +99,7 @@ const CourseList = () => {
                             <h6>
                               <Link to={`/course-detail/${course.id}`}>{course.subjectName}</Link>
                             </h6>
-                            <p>{course.description}</p>
+                            {/* <p>{course.description}</p> */}
                           </div>
                           <div className="emt-course-meta">
                             <div className="row">

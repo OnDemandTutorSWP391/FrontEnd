@@ -30,8 +30,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route index element={<HomePage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
-        <Route path="forget-password" element={<ForgetPassword />} />
-        <Route path="confirm-password" element={<ForgetPassEnter />} />
+        
 
         {/* Private Routes */}
         <Route element={<PrivateRoute />}>
@@ -44,7 +43,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="tutor-list" element={<TutorList />} />
           
         </Route>
+        
       </Route>
+      <Route path="forget-password" element={<ForgetPassword />} />
+        <Route path="confirm-password" element={<ForgetPassEnter />} />
 
       {/* Admin Routes */}
       <Route path="admin/*" element={<Admin />} />
