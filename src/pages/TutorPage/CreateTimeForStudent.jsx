@@ -95,6 +95,9 @@ const CreateTutorSchedule = () => {
   
       console.log(formattedData);
       const response = await postCreateTimeTutor(formattedData);
+      if(response.err){
+        toast.error('Error creating schedule. Please try again.');
+      }
       toast.success('Schedule created successfully!');
       // Reset form after successful submission
       setScheduleData({
