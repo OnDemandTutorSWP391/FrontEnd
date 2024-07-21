@@ -24,7 +24,7 @@ const getThreeCourseByTutorId = async (tutorId) => {
 
 const getAllSubjectLevelFollowRating = async () => {
   return await axiosClient.get(
-    `/SubjectLevels/get-all-subject-level-follow-rating?page=1`
+    `/SubjectLevels/get-top-6-subject-level-follow-rating?page=1`
   );
 };
 
