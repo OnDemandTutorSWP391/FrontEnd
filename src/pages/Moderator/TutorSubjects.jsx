@@ -26,6 +26,8 @@ import {
   Alert
 } from '@mui/material';
 import { axiosClient } from '../../axios/AxiosClient';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../../firebase';
 
 const TutorSubjects = () => {
   const [subjects, setSubjects] = useState([]);
@@ -39,7 +41,7 @@ const TutorSubjects = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
-
+  const [imageFile, setImageFile] = useState(null);
   const fetchSubjects = async () => {
     try {
       const response = await axiosClient.get(`/SubjectLevels/get-all-subject-level-by-tutorId?page=${page + 1}`);
@@ -91,10 +93,18 @@ const TutorSubjects = () => {
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setSelectedSubject(null);
+    setImageFile(null);
   };
 
   const handleUpdateSubject = async () => {
     try {
+      let imageUrl = selectedSubject.image;
+      if (imageFile) {
+        const imageRef = ref(storage, `subject-images/${imageFile.name}`);
+        await uploadBytes(imageRef, imageFile);
+        imageUrl = await getDownloadURL(imageRef);
+      }
+  
       const response = await axiosClient.put(`/SubjectLevels/update-subject-level-for-tutor?id=${selectedSubject.id}`, {
         levelId: selectedSubject.levelId,
         subjectId: selectedSubject.subjectId,
@@ -104,7 +114,7 @@ const TutorSubjects = () => {
         url: selectedSubject.url,
         coin: selectedSubject.coin,
         limitMember: parseInt(selectedSubject.limitMember.split('/')[1]),
-        image: selectedSubject.image
+        image: imageUrl
       });
       setSnackbarMessage('Subject updated successfully!');
       setSnackbarSeverity('success');
@@ -249,14 +259,19 @@ const TutorSubjects = () => {
             value={selectedSubject?.limitMember?.split('/')[1] || ''}
             onChange={handleInputChange}
           />
-          <TextField
-            fullWidth
-            margin="normal"
-            name="image"
-            label="Image URL"
-            value={selectedSubject?.image || ''}
-            onChange={handleInputChange}
-          />
+          <input
+  type="file"
+  accept="image/*"
+  onChange={(e) => setImageFile(e.target.files[0])}
+/>
+<input
+    type="file"
+    accept="image/*"
+    onChange={(e) => setImageFile(e.target.files[0])}
+  />
+  {selectedSubject?.image && (
+    <img src={selectedSubject.image} alt="Current" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+  )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>
