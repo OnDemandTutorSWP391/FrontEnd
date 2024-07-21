@@ -6,7 +6,6 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AdminHeader from "../../components/AdminHeader/AdminHeader";
 import { axiosClient } from "../../axios/AxiosClient";
 
-
 const WeeklySchedule = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -29,7 +28,7 @@ const WeeklySchedule = () => {
       
       const response = await axiosClient.get(url);
       if (response.data.success) {
-        setStudentJoins(response.data.data);
+        setStudentJoins(response.data.data || []);  // Ensure it's always an array
       }
     } catch (error) {
       console.error("Error fetching student joins:", error);
@@ -90,13 +89,13 @@ const WeeklySchedule = () => {
     <Box m="20px">
       <AdminHeader title="Student Joins" subtitle="Managing Student Joins" />
       <Box mb="20px">
-        <TextField
+        {/* <TextField
           label="User ID"
           variant="outlined"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
           style={{ marginRight: '10px' }}
-        />
+        /> */}
         <TextField
           label="Subject Level ID"
           variant="outlined"

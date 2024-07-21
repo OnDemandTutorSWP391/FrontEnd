@@ -57,13 +57,13 @@ const RatingManager = () => {
     <Box m="20px">
       <AdminHeader title="Ratings" subtitle="Managing Ratings" />
       <Box mb="20px">
-        <TextField
+        {/* <TextField
           label="User ID"
           variant="outlined"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
           style={{ marginRight: '10px' }}
-        />
+        /> */}
       </Box>
       <Box
         height="75vh"

@@ -40,7 +40,7 @@ const AccountManager = () => {
 
   const confirmLockAccount = async () => {
     try {
-      const response = await axiosClient.post(`/Lock-user-account?id=${selectedUserId}`);
+      const response = await axiosClient.put(`/Admins/Lock-user-account?id=${selectedUserId}`);
       if (response.data.success) {
         fetchUsers(); // Refresh user list
         setOpenDialog(false);

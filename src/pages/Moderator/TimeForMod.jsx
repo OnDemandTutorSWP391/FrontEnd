@@ -22,16 +22,27 @@ const WeeklySchedule = () => {
 
   const fetchStudentJoins = async () => {
     try {
-      let url = `/StudentJoins/all-student-join-for-all-subject-level?page=${page}`;
+      let currentPage = page;
+      if (subjectLevelId && !userId) {
+        currentPage = 1;
+      }
+
+      let url = `/StudentJoins/all-student-join-for-all-subject-level?page=${currentPage}`;
       if (userId) url += `&userId=${userId}`;
       if (subjectLevelId) url += `&subjectLevelId=${subjectLevelId}`;
-      
+
       const response = await axiosClient.get(url);
       if (response.data.success) {
-        setStudentJoins(response.data.data);
+        setStudentJoins(response.data.data || []); // Ensure data is an array
+        if (subjectLevelId && !userId) {
+          setPage(1);
+        }
+      } else {
+        setStudentJoins([]); // Set to empty array if response is not successful
       }
     } catch (error) {
       console.error("Error fetching student joins:", error);
+      setStudentJoins([]); // Set to empty array on error
     }
   };
 
@@ -49,6 +60,13 @@ const WeeklySchedule = () => {
       }
     } catch (error) {
       console.error("Error deleting student join:", error);
+    }
+  };
+
+  const handleSubjectLevelIdChange = (e) => {
+    setSubjectLevelId(e.target.value);
+    if (e.target.value && !userId) {
+      setPage(1);
     }
   };
 
@@ -90,17 +108,10 @@ const WeeklySchedule = () => {
       <AdminHeader title="Student Joins" subtitle="Managing Student Joins" />
       <Box mb="20px">
         <TextField
-          label="User ID"
-          variant="outlined"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-          style={{ marginRight: '10px' }}
-        />
-        <TextField
           label="Subject Level ID"
           variant="outlined"
           value={subjectLevelId}
-          onChange={(e) => setSubjectLevelId(e.target.value)}
+          onChange={handleSubjectLevelIdChange}
         />
       </Box>
       <Box
@@ -132,7 +143,7 @@ const WeeklySchedule = () => {
         }}
       >
         <DataGrid
-          rows={studentJoins}
+          rows={studentJoins.length ? studentJoins : []}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
           onPageChange={(newPage) => setPage(newPage)}

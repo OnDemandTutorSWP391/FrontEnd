@@ -11,13 +11,14 @@ import {
   CircularProgress,
   Alert
 } from '@mui/material';
-import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { postCreateTimeTutor } from '../../service/CourseService';
 import { axiosClient } from '../../axios/AxiosClient';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import moment from 'moment/moment';
 
 const CreateTutorSchedule = () => {
   const [scheduleData, setScheduleData] = useState({
@@ -27,6 +28,11 @@ const CreateTutorSchedule = () => {
     endSlot: null,
     date: null
   });
+  const [subjectLevelId, setSubjectLevelId] = useState();
+  const [slotName, setSlotName] = useState();
+  const [startSlot, setStartSlot] = useState();
+  const [endSlot, setEndSlot] = useState();
+  const [date, setDate] = useState();
   const [subjectLevels, setSubjectLevels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -57,17 +63,18 @@ const CreateTutorSchedule = () => {
   };
 
   const handleDateChange = (newDate) => {
-    setScheduleData(prevData => ({
-      ...prevData,
-      date: newDate
-    }));
+    setDate(newDate)
+    console.log(newDate);
   };
 
   const handleTimeChange = (newTime, field) => {
-    setScheduleData(prevData => ({
-      ...prevData,
-      [field]: newTime
-    }));
+    if (field === "startSlot") {
+      setStartSlot(newTime);
+      console.log(startSlot);
+    } else {
+      setEndSlot(newTime);
+      console.log(endSlot);
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -88,9 +95,9 @@ const CreateTutorSchedule = () => {
       const formattedData = {
         subjectLevelId: scheduleData.subjectLevelId ? parseInt(scheduleData.subjectLevelId, 10) : null,
         slotName: scheduleData.slotName || "",
-        startSlot: formattedStartSlot,
-        endSlot: formattedEndSlot,
-        date: formattedDate
+        startSlot: moment(new Date(startSlot)).add(7,'hours'),
+        endSlot: moment(new Date(endSlot)).add(7,'hours'),
+        date: moment(new Date(date)).add(7,'hours'),
       };
   
       console.log(formattedData);
@@ -161,7 +168,7 @@ const CreateTutorSchedule = () => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <DatePicker
+                  <DateTimePicker
                     label="Date"
                     value={scheduleData.date}
                     onChange={handleDateChange}
@@ -169,7 +176,7 @@ const CreateTutorSchedule = () => {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <TimePicker
+                  <DateTimePicker
                     label="Start Time"
                     value={scheduleData.startSlot}
                     onChange={(newTime) => handleTimeChange(newTime, 'startSlot')}
@@ -177,7 +184,7 @@ const CreateTutorSchedule = () => {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <TimePicker
+                  <DateTimePicker
                     label="End Time"
                     value={scheduleData.endSlot}
                     onChange={(newTime) => handleTimeChange(newTime, 'endSlot')}

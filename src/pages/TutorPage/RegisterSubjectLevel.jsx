@@ -18,10 +18,10 @@ import { storage } from '../../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { toast, ToastContainer } from 'react-toastify';
 
-const RegisterSubjectLevel = () => {
+const RegisterSubjectLevel = ({ updateData }) => {
   const [subjectLevel, setSubjectLevel] = useState({
-    levelId: '',
-    subjectId: '',
+    levelId: null,
+    subjectId: null,
     tutorId: '1',
     name: '',
     description: '',
@@ -40,7 +40,15 @@ const RegisterSubjectLevel = () => {
   useEffect(() => {
     fetchLevels();
     fetchSubjects();
-  }, []);
+    if (updateData) {
+      setSubjectLevel(prevState => ({
+        ...prevState,
+        ...updateData,
+        levelId: updateData.levelId || null,
+        subjectId: updateData.subjectId || null,
+      }));
+    }
+  }, [updateData]);
 
   const fetchLevels = async () => {
     try {
@@ -79,7 +87,10 @@ const RegisterSubjectLevel = () => {
   };
 
   const handleDataChange = (key, value) => {
-    setSubjectLevel({ ...subjectLevel, [key]: value });
+    setSubjectLevel(prevState => ({
+      ...prevState,
+      [key]: value
+    }));
   };
 
   const handleFileChange = (e) => {
@@ -127,7 +138,7 @@ const RegisterSubjectLevel = () => {
           <FormControl fullWidth margin="normal">
             <InputLabel>Level</InputLabel>
             <Select
-              value={subjectLevel.levelId}
+              value={subjectLevel.levelId || ''}
               onChange={(e) => handleDataChange("levelId", e.target.value)}
               required
             >
@@ -140,7 +151,7 @@ const RegisterSubjectLevel = () => {
           <FormControl fullWidth margin="normal">
             <InputLabel>Subject</InputLabel>
             <Select
-              value={subjectLevel.subjectId}
+              value={subjectLevel.subjectId || ''}
               onChange={(e) => handleDataChange("subjectId", e.target.value)}
               required
             >
@@ -150,7 +161,6 @@ const RegisterSubjectLevel = () => {
             </Select>
           </FormControl>
 
-          
           <TextField
             fullWidth
             margin="normal"
@@ -191,7 +201,6 @@ const RegisterSubjectLevel = () => {
             required
           />
 
-          
           <TextField
             fullWidth
             margin="normal"
