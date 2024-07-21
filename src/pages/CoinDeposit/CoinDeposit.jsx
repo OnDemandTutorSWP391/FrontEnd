@@ -39,7 +39,7 @@ const CoinDeposit = () => {
 
     return (
         <div>
-            <div className="breadcrumb-area bg-overlay" style={{ backgroundImage: `url('/public/img/bg/3.png')` }}>
+            <div className="breadcrumb-area bg-overlay" style={{ backgroundColor: "#143254" }}>
                 <div className="container">
                     <div className="breadcrumb-inner">
                         <div className="section-title mb-0 text-center">

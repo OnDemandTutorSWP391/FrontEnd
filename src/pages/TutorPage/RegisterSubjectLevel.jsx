@@ -16,6 +16,7 @@ import {
 import { axiosClient } from '../../axios/AxiosClient';
 import { storage } from '../../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { toast, ToastContainer } from 'react-toastify';
 
 const RegisterSubjectLevel = () => {
   const [subjectLevel, setSubjectLevel] = useState({
@@ -102,12 +103,12 @@ const RegisterSubjectLevel = () => {
       };
 
       const response = await axiosClient.post('/SubjectLevels/register-subject-level', subjectLevelData);
-      if (response.data && response.data.success) {
-        setSnackbarMessage(response.data.message || "Subject level registered successfully!");
-        setSnackbarSeverity("success");
-      } else {
-        setSnackbarMessage(response.data.message || "Failed to register subject level");
-        setSnackbarSeverity("error");
+      console.log(response);
+      if (response.data) {
+        toast.success("Register Subject Level Success");
+      } 
+      if(response.err){
+        toast.error(response.err.response.data.message)
       }
     } catch (error) {
       setSnackbarMessage(error.response?.data?.message || "An error occurred while registering the subject level");
@@ -217,6 +218,7 @@ const RegisterSubjectLevel = () => {
           >
             Register Subject Level
           </Button>
+          <ToastContainer/>
         </Box>
       </Paper>
 

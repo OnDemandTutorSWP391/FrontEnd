@@ -77,7 +77,7 @@ const CourseList = () => {
     <div>
       <div
         className="breadcrumb-area bg-overlay"
-        style={{ backgroundImage: 'url("assets/img/bg/3.png")' }}
+        style={{ backgroundColor: "#143254" }}
       >
         <div className="container">
           <div className="breadcrumb-inner">

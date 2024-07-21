@@ -91,6 +91,21 @@ const ModeratorRequests = () => {
   const handleResponseTitleChange = (event) => {
     setResponseTitle(event.target.value);
   };
+  const handleUpdateTutorStatus = async (status) => {
+    try {
+      await axiosClient.put(`/Tutors/update-status-profile?tutorId=${tutorData.id}&status=${status}`);
+      setSnackbarMessage(`Tutor status updated to ${status} successfully!`);
+      setSnackbarSeverity('success');
+      setOpenSnackbar(true);
+      handleCloseTutorDialog();
+      fetchRequests(); // Refresh the requests list
+    } catch (error) {
+      console.error('Error updating tutor status:', error);
+      setSnackbarMessage('Error updating tutor status. Please try again.');
+      setSnackbarSeverity('error');
+      setOpenSnackbar(true);
+    }
+  };
 
   const handleResponseContentChange = (event) => {
     setResponseContent(event.target.value);
@@ -257,26 +272,32 @@ const ModeratorRequests = () => {
       </Dialog>
 
       <Dialog open={openTutorDialog} onClose={handleCloseTutorDialog}>
-        <DialogTitle>Tutor Information</DialogTitle>
-        <DialogContent>
-          {tutorData && (
-            <>
-              <Typography><strong>Name:</strong> {tutorData.tutorName}</Typography>
-              <Typography><strong>Academic Level:</strong> {tutorData.academicLevel}</Typography>
-              <Typography><strong>Work Place:</strong> {tutorData.workPlace}</Typography>
-              <Typography><strong>Degree:</strong> {tutorData.degree}</Typography>
-              <Typography><strong>Video:</strong> {tutorData.tutorServiceVideo}</Typography>
-              <Typography><strong>Service Name:</strong> {tutorData.tutorServiceName}</Typography>
-              <Typography><strong>Service Description:</strong> {tutorData.tutorServiceDescription}</Typography>
-              <Typography><strong>Status:</strong> {tutorData.status}</Typography>
-              <Typography><strong>Average Star:</strong> {tutorData.averageStar}</Typography>
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseTutorDialog}>Close</Button>
-        </DialogActions>
-      </Dialog>
+  <DialogTitle>Tutor Information</DialogTitle>
+  <DialogContent>
+    {tutorData && (
+      <>
+        <Typography><strong>Name:</strong> {tutorData.tutorName}</Typography>
+        <Typography><strong>Academic Level:</strong> {tutorData.academicLevel}</Typography>
+        <Typography><strong>Work Place:</strong> {tutorData.workPlace}</Typography>
+        <Typography><strong>Degree:</strong> {tutorData.degree}</Typography>
+        <Typography><strong>Video:</strong> {tutorData.tutorServiceVideo}</Typography>
+        <Typography><strong>Service Name:</strong> {tutorData.tutorServiceName}</Typography>
+        <Typography><strong>Service Description:</strong> {tutorData.tutorServiceDescription}</Typography>
+        <Typography><strong>Status:</strong> {tutorData.status}</Typography>
+        <Typography><strong>Average Star:</strong> {tutorData.averageStar}</Typography>
+      </>
+    )}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={handleCloseTutorDialog}>Close</Button>
+    <Button variant="contained" color="success" onClick={() => handleUpdateTutorStatus('Chấp Thuận')}>
+      Chấp Thuận
+    </Button>
+    <Button variant="contained" color="error" onClick={() => handleUpdateTutorStatus('Từ Chối')}>
+      Từ Chối
+    </Button>
+  </DialogActions>
+</Dialog>
 
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
         <Alert onClose={() => setOpenSnackbar(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>

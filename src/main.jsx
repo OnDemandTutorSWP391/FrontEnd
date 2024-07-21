@@ -47,16 +47,18 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       </Route>
       <Route path="forget-password" element={<ForgetPassword />} />
         <Route path="confirm-password" element={<ForgetPassEnter />} />
-
-      {/* Admin Routes */}
+        <Route element={<PrivateRoute />}>
+        {/* Admin Routes */}
       <Route path="admin/*" element={<Admin />} />
 
-      {/* Profile Routes */}
-      <Route path="profile/*" element={<UserProfile />} />
+{/* Profile Routes */}
+<Route path="profile/*" element={<UserProfile />} />
 
-      {/* Tutor Routes */}
-      <Route path="tutor/*" element={<Tutor />} />
-      <Route path="moderator/*" element={<Moderator />} />
+{/* Tutor Routes */}
+<Route path="tutor/*" element={<Tutor />} />
+<Route path="moderator/*" element={<Moderator />} />
+        </Route>
+      
 
       {/* Catch-all route for 404 */}
       <Route path="*" element={<NotFound />} />

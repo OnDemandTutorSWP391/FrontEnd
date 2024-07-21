@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
@@ -20,6 +20,7 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 const Item = ({ title, to, icon, selected, setSelected }) => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
+    
     return (
       <MenuItem
         active={selected === title}
@@ -40,6 +41,10 @@ const ModSideBar = () => {
     const colors = tokens(theme.palette.mode);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
+    const navigate = useNavigate();
+    const handleBack = () => {
+      navigate("/");
+    };
   
     return (
       <Box
@@ -64,6 +69,12 @@ const ModSideBar = () => {
         <ProSidebar collapsed={isCollapsed}>
           <Menu iconShape="square">
             {/* LOGO AND MENU ICON */}
+            <div
+            onClick={handleBack}
+            className="ml-3 cursor-pointer text-xl text-black"
+          >
+            {!isCollapsed ? "Back to home page" : "Back"}
+          </div>
             <MenuItem
               onClick={() => setIsCollapsed(!isCollapsed)}
               icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}

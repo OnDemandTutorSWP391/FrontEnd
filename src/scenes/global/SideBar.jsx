@@ -62,6 +62,12 @@ const Sidebar = () => {
       }}
     >
       <ProSidebar collapsed={isCollapsed}>
+      <div
+            onClick={handleBack}
+            className="ml-3 cursor-pointer text-xl text-black"
+          >
+            {!isCollapsed ? "Back to home page" : "Back"}
+          </div>
         <Menu iconShape="square">
           {/* LOGO AND MENU ICON */}
           <MenuItem

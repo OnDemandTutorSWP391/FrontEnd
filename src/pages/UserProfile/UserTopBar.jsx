@@ -8,11 +8,14 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
+import useStore from "../../app/store";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const UserTopBar = () => {
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const colorMode = useContext(ColorModeContext);
+    const { isLoggedIn, user, clearToken } = useStore();
   
     return (
       <Box display="flex" justifyContent="space-between" p={2}>
@@ -43,8 +46,11 @@ const UserTopBar = () => {
           <IconButton>
             <SettingsOutlinedIcon />
           </IconButton>
-          <IconButton>
-            <PersonOutlinedIcon />
+          <IconButton
+          onClick={clearToken}
+          >
+            <LogoutIcon />
+
           </IconButton>
         </Box>
       </Box>

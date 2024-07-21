@@ -45,7 +45,7 @@ const RegisterPage = () => {
     console.log(response);
 
     if (response.err) {
-      toast.error(response.err.response.data.message.split('.')[2]);
+      toast.error(response.err.response.data.message.split(".")[2]);
     } else {
       navigate("/login");
       toast.success("Đăng kí thành công");
@@ -57,7 +57,7 @@ const RegisterPage = () => {
     <div>
       <div
         className="breadcrumb-area bg-overlay"
-        style={{ backgroundImage: "url('assets/img/bg/3.png')" }}
+        style={{ backgroundColor: "#143254" }}
       >
         <div className="container">
           <div className="breadcrumb-inner">
@@ -82,6 +82,7 @@ const RegisterPage = () => {
                 <div className="row">
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
+                      <label htmlFor="">Full Name</label>
                       <input
                         type="text"
                         placeholder="Full Name"
@@ -93,6 +94,7 @@ const RegisterPage = () => {
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
+                      <label htmlFor="">Email</label>
                       <input
                         type="email"
                         placeholder="Email"
@@ -104,6 +106,7 @@ const RegisterPage = () => {
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
+                      <label htmlFor="">Password</label>
                       <input
                         type="password"
                         placeholder="Password"
@@ -115,6 +118,7 @@ const RegisterPage = () => {
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
+                      <label htmlFor="">Confirm Password</label>
                       <input
                         type="password"
                         placeholder="Confirm Password"
@@ -126,6 +130,7 @@ const RegisterPage = () => {
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
+                      <label htmlFor="">Identity Card</label>
                       <input
                         type="text"
                         placeholder="Identity Card"
@@ -137,6 +142,7 @@ const RegisterPage = () => {
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
+                      <label htmlFor="">Date Of Birth</label>
                       <input
                         type="date"
                         placeholder="DOB"
@@ -148,6 +154,7 @@ const RegisterPage = () => {
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
+                      <label htmlFor="">Phone Number</label>
                       <input
                         type="text"
                         placeholder="Phone Number"
@@ -173,6 +180,7 @@ const RegisterPage = () => {
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
+                      <label htmlFor="">Avatar</label>
                       <input
                         type="file"
                         placeholder="Avatar"
@@ -198,12 +206,6 @@ const RegisterPage = () => {
                       Create Account
                     </button>
                     <ToastContainer />
-                  </div>
-                  <div className="col-12">
-                    <span>By creating an account</span>
-                    <a href="/login">
-                      <strong>Signin</strong>
-                    </a>
                   </div>
                 </div>
               </form>

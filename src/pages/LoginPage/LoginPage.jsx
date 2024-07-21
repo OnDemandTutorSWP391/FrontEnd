@@ -41,22 +41,27 @@ const LoginPage = () => {
   const role =
     user &&
     user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-
+ 
   useEffect(() => {
     if (isLoggedIn()) {
-      if (role === 'Moderator') {
-        navigate('/moderator');
+      console.log(role);
+      if (role === "Moderator") {
+        navigate("/moderator");
+      }
+      if (role === "Admin") {
+        navigate("/admin");
       } else {
-        navigate('/');
+        navigate("/");
       }
     }
+    
   }, [isLoggedIn, role, navigate]);
 
   return (
     <>
       <div
         className="breadcrumb-area bg-overlay"
-        style={{ backgroundImage: `url('/public/img/bg/3.png')` }}
+        style={{ backgroundColor: "#143254" }}
       >
         <div className="container">
           <div className="breadcrumb-inner">
@@ -80,6 +85,7 @@ const LoginPage = () => {
                 <div className="row">
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
+                      <label htmlFor="">Email</label>
                       <input
                         type="email"
                         placeholder="Email"
@@ -92,6 +98,7 @@ const LoginPage = () => {
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
+                      <label htmlFor="">Password</label>
                       <input
                         type="password"
                         placeholder="Password"

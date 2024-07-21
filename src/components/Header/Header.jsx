@@ -9,7 +9,6 @@ import { getUserCoin as fetchUserCoin } from "../../service/CoinService";
 import LoadScripts from "../../pages/HomePage/LoadScript";
 import { useContext, useEffect, useState } from "react";
 import useToggleStore from "./useToggleStore";
-import { Link } from "react-bootstrap/lib/Navbar";
 
 const Header = () => {
   const { isLoggedIn, user, clearToken } = useStore();
@@ -23,7 +22,6 @@ const Header = () => {
   });
   const [userCoin, setUserCoin] = useState();
   const { isActive, toggle } = useToggleStore();
-  console.log(isActive);
   useEffect(() => {
     if (checkTokenExpiration()) {
       clearToken();
@@ -65,6 +63,7 @@ const Header = () => {
         return "/profile";
     }
   };
+  
 
   return (
     <header>
@@ -214,7 +213,7 @@ const Header = () => {
             </div>
           </div>
         </nav>
-        <LoadScripts />
+        {/* <LoadScripts /> */}
       </div>
     </header>
   );
