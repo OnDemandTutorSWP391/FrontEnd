@@ -101,7 +101,7 @@ const Dashboard = () => {
         </Box>
 
         {/* Phần trăm thay đổi */}
-        <Box
+        {/* <Box
           gridColumn="span 3"
           backgroundColor={colors.primary[400]}
           display="flex"
@@ -111,7 +111,7 @@ const Dashboard = () => {
           <Typography variant="h4" fontWeight="bold" sx={{ color: percentageChange >= 0 ? colors.greenAccent[500] : colors.redAccent[500] }}>
             {percentageChange}%
           </Typography>
-        </Box>
+        </Box> */}
 
         {/* Biểu đồ */}
         <Box
