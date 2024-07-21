@@ -7,17 +7,17 @@ import {
   Container,
   Grid,
   Paper,
-  Snackbar,
-  Alert,
   MenuItem,
-  CircularProgress
+  CircularProgress,
+  Alert
 } from '@mui/material';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { postCreateTimeTutor } from '../../service/CourseService';
-import axios from 'axios';
 import { axiosClient } from '../../axios/AxiosClient';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreateTutorSchedule = () => {
   const [scheduleData, setScheduleData] = useState({
@@ -27,9 +27,6 @@ const CreateTutorSchedule = () => {
     endSlot: null,
     date: null
   });
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [subjectLevels, setSubjectLevels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -98,9 +95,7 @@ const CreateTutorSchedule = () => {
   
       console.log(formattedData);
       const response = await postCreateTimeTutor(formattedData);
-      setSnackbarMessage('Schedule created successfully!');
-      setSnackbarSeverity('success');
-      setOpenSnackbar(true);
+      toast.success('Schedule created successfully!');
       // Reset form after successful submission
       setScheduleData({
         subjectLevelId: '',
@@ -111,9 +106,7 @@ const CreateTutorSchedule = () => {
       });
     } catch (error) {
       console.error('Error creating schedule:', error);
-      setSnackbarMessage('Error creating schedule. Please try again.');
-      setSnackbarSeverity('error');
-      setOpenSnackbar(true);
+      toast.error('Error creating schedule. Please try again.');
     }
   };
 
@@ -195,15 +188,12 @@ const CreateTutorSchedule = () => {
               >
                 Create Schedule
               </Button>
+              <ToastContainer />
             </Box>
           )}
         </Paper>
       </Container>
-      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
-        <Alert onClose={() => setOpenSnackbar(false)} severity={snackbarSeverity} sx={{ width: '100%' }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
+      <ToastContainer />
     </LocalizationProvider>
   );
 };
