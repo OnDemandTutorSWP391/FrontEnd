@@ -45,7 +45,7 @@ const RegisterPage = () => {
     console.log(response);
 
     if (response.err) {
-      toast.error(response.err.response.data.message.split(".")[2]);
+      toast.error(response.err.response.data.message);
     } else {
       navigate("/login");
       toast.success("Đăng kí thành công");

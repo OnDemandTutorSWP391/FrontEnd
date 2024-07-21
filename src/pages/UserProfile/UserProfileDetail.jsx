@@ -54,7 +54,7 @@ const UserProfileDetail = () => {
         setDataUpdate({
           fullName: profileData.fullName,
           dob: new Date(profileData.dob),
-          gender: profileData.gender,
+          gender: capitalizeFirstLetter(profileData.gender),
           avatar: profileData.avatar,
         });
       } catch (error) {
@@ -64,6 +64,9 @@ const UserProfileDetail = () => {
     };
     fetchUserProfile();
   }, []);
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   const handleDataChange = (key, value) => {
     setDataUpdate({ ...formDataUpdate, [key]: value });
@@ -85,7 +88,8 @@ const UserProfileDetail = () => {
       const updatedData = {
         ...formDataUpdate,
         avatar: avatarUrl,
-        dob: formDataUpdate.dob.toISOString()
+        dob: formDataUpdate.dob.toISOString(),
+        gender: formDataUpdate.gender.toLowerCase() // Convert back to lowercase before sending to API
       };
 
       await updateUserProfile(updatedData);
@@ -142,18 +146,18 @@ const UserProfileDetail = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <FormControl fullWidth>
-                  <InputLabel>Gender</InputLabel>
-                  <Select
-                    value={formDataUpdate.gender}
-                    onChange={(e) => handleDataChange("gender", e.target.value)}
-                  >
-                    <MenuItem value="Male">Male</MenuItem>
-                    <MenuItem value="Female">Female</MenuItem>
-                    <MenuItem value="Other">Other</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
+      <FormControl fullWidth>
+        <InputLabel>Gender</InputLabel>
+        <Select
+          value={formDataUpdate.gender}
+          onChange={(e) => handleDataChange("gender", e.target.value)}
+        >
+          <MenuItem value="Male">Male</MenuItem>
+          <MenuItem value="Female">Female</MenuItem>
+          <MenuItem value="Other">Other</MenuItem>
+        </Select>
+      </FormControl>
+    </Grid>
               <Grid item xs={12}>
                 <input
                   accept="image/*"
