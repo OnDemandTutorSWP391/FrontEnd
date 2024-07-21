@@ -6,10 +6,12 @@ import { getAllSubjectLevelFollowRating } from "../../service/CourseService";
 import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+  
   const navigate = useNavigate();
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
+    document.title("On Demand Tutor")
     const fetchCourse = async () => {
       try {
         const response = await getAllSubjectLevelFollowRating();
