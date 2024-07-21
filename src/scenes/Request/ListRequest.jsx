@@ -115,7 +115,7 @@ const ModeratorRequests = () => {
   };
 
   return (
-    <Container maxWidth="lg">
+    <div className="p-10">
       <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Moderator Requests
@@ -214,7 +214,7 @@ const ModeratorRequests = () => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
-    </Container>
+    </div>
   );
 };
 

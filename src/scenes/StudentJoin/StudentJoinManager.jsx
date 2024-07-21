@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, useTheme, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
+import { Box, Typography, useTheme, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, CircularProgress } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AdminHeader from "../../components/AdminHeader/AdminHeader";
 import { axiosClient } from "../../axios/AxiosClient";
-
 
 const StudentJoinManager = () => {
   const theme = useTheme();
@@ -16,12 +15,14 @@ const StudentJoinManager = () => {
   const [selectedStudentJoinId, setSelectedStudentJoinId] = useState(null);
   const [userId, setUserId] = useState("");
   const [subjectLevelId, setSubjectLevelId] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchStudentJoins();
   }, [page, userId, subjectLevelId]);
 
   const fetchStudentJoins = async () => {
+    setLoading(true);
     try {
       let url = `/StudentJoins/all-student-join-for-all-subject-level?page=${page}`;
       if (userId) url += `&userId=${userId}`;
@@ -29,10 +30,17 @@ const StudentJoinManager = () => {
       
       const response = await axiosClient.get(url);
       if (response.data.success) {
-        setStudentJoins(response.data.data);
+        const mappedStudentJoins = response.data.data.map((join, index) => ({
+          ...join,
+          id: join.id || index, // Ensure unique id
+        }));
+        setStudentJoins(mappedStudentJoins);
       }
     } catch (error) {
       console.error("Error fetching student joins:", error);
+      setStudentJoins([]); // Set to empty array in case of error
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -90,13 +98,13 @@ const StudentJoinManager = () => {
     <Box m="20px">
       <AdminHeader title="Student Joins" subtitle="Managing Student Joins" />
       <Box mb="20px">
-        <TextField
+        {/* <TextField
           label="User ID"
           variant="outlined"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
           style={{ marginRight: '10px' }}
-        />
+        /> */}
         <TextField
           label="Subject Level ID"
           variant="outlined"
@@ -132,14 +140,16 @@ const StudentJoinManager = () => {
           },
         }}
       >
-        <DataGrid
-          rows={studentJoins}
-          columns={columns}
-          components={{ Toolbar: GridToolbar }}
-          onPageChange={(newPage) => setPage(newPage)}
-          pageSize={10}
-          rowsPerPageOptions={[10]}
-        />
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <DataGrid
+            rows={studentJoins}
+            columns={columns}
+            components={{ Toolbar: GridToolbar }}
+            onPageChange={(newPage) => setPage(newPage)}
+          />
+        )}
       </Box>
 
       {/* Confirmation Dialog */}

@@ -92,12 +92,14 @@ const AccountManager = () => {
       renderCell: ({ row: { roles } }) => {
         const role = roles[0]; // Assuming only one role per user
         return (
+          <div>
           <Box
-            width="60%"
-            m="0 auto"
+          marginTop="11px"
+            
             p="5px"
             display="flex"
             justifyContent="center"
+            alignItems="center"
             backgroundColor={
               role === "Admin"
                 ? colors.greenAccent[600]
@@ -114,6 +116,8 @@ const AccountManager = () => {
               {role}
             </Typography>
           </Box>
+          </div>
+          
         );
       },
     },
@@ -124,6 +128,7 @@ const AccountManager = () => {
       renderCell: ({ row }) => {
         return (
           <Button
+          
             variant="contained"
             color="secondary"
             startIcon={<LockIcon />}

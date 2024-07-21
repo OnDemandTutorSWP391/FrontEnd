@@ -42,12 +42,6 @@ const HomePage = () => {
                 <h1 className="b-animate-2 title">
                   A better learning future starts here
                 </h1>
-                <a
-                  className="btn btn-base b-animate-3 mr-sm-3 mr-2"
-                  
-                >
-                  Get A Quote
-                </a>
                 
               </div>
             </div>
