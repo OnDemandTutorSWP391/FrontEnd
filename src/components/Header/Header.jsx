@@ -58,12 +58,22 @@ const Header = () => {
   const isAdmin = () => {
     return user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] === "Admin";
   };
+  const isTutor = () => {
+    return user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] === "Tutor";
+  };
+  const isStudent = () => {
+    return user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] === "Student";
+  };
 
   const handleConsoleClick = () => {
     if (isModerator()) {
       navigate("/moderator");
     } else if (isAdmin()) {
       navigate("/admin");
+    }else if(isTutor()){
+      navigate("/tutor");
+    }else if(isStudent()){
+      navigate("/profile");
     }
   };
 
@@ -73,7 +83,17 @@ const Header = () => {
         <div className="row bg-white">
           <div className="col-md-1"></div>
           <div className="col-md-3 h-14 flex items-center">
-            {isLoggedIn() && !isModerator() && !isAdmin() && (
+            {/* {isLoggedIn() && !isModerator() && !isAdmin() && (
+              <a href="/profile" className="text-3xl">
+                Welcome, {userProfile.fullName}
+              </a>
+            )} */}
+            {isLoggedIn() && !isModerator() && !isAdmin() && !isStudent() && isTutor() &&(
+              <a href="/tutor" className="text-3xl">
+                Welcome, {userProfile.fullName}
+              </a>
+            )}
+            {isLoggedIn() && !isModerator() && !isAdmin() && !isTutor() && isStudent() &&(
               <a href="/profile" className="text-3xl">
                 Welcome, {userProfile.fullName}
               </a>
