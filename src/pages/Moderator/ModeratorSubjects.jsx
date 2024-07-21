@@ -124,9 +124,9 @@ const ModeratorSubjects = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Action</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">ID</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Name</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

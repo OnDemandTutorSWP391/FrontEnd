@@ -97,12 +97,12 @@ const ModeratorRatings = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Tutor Name</TableCell>
-                <TableCell>Student Name</TableCell>
-                <TableCell>Star</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">ID</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Tutor Name</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Student Name</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Star</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Description</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

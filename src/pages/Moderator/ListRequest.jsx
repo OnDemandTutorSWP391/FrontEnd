@@ -187,14 +187,14 @@ const ModeratorRequests = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Request ID</TableCell>
-                <TableCell>User ID</TableCell>
-                <TableCell>Full Name</TableCell>
-                <TableCell>Category</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Created Date</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Request ID</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">User ID</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Full Name</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Category</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Description</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Status</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Created Date</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

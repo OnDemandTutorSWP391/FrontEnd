@@ -131,9 +131,9 @@ const RequestCategoryList = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Category Name</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">ID</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Category Name</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

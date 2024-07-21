@@ -33,7 +33,7 @@ const HomePage = () => {
           <div className="row justify-content-center">
             <div className="col-lg-5 col-md-8 order-lg-12 align-self-center">
               <div className="thumb b-animate-thumb">
-                <img src="/public/img/banner/1.png" alt="img" />
+                <img src="https://firebasestorage.googleapis.com/v0/b/swp391-fbb3f.appspot.com/o/Homepage%2F1.png?alt=media&token=a783e8d9-4432-4c0c-85be-6117745b721b" alt="img" />
               </div>
             </div>
             <div className="col-lg-7 order-lg-1 align-self-center">
@@ -44,16 +44,11 @@ const HomePage = () => {
                 </h1>
                 <a
                   className="btn btn-base b-animate-3 mr-sm-3 mr-2"
-                  href="contact.html"
+                  
                 >
                   Get A Quote
                 </a>
-                <a
-                  className="btn btn-border-black b-animate-3"
-                  href="blog.html"
-                >
-                  Read More
-                </a>
+                
               </div>
             </div>
           </div>

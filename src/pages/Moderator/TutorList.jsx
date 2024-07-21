@@ -88,15 +88,15 @@ const TutorList12 = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Avatar</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Academic Level</TableCell>
-                <TableCell>Work Place</TableCell>
-                <TableCell>Service</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Average Star</TableCell>
-                <TableCell>Is Locked</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Avatar</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Name</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Academic Level</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Work Place</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Service</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Status</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Average Star</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Is Locked</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

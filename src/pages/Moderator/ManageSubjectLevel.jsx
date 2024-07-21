@@ -97,16 +97,16 @@ const SubjectLevelList = () => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>ID</TableCell>
-                    <TableCell>Level Name</TableCell>
-                    <TableCell>Subject Name</TableCell>
-                    <TableCell>Tutor Name</TableCell>
-                    <TableCell>Service Name</TableCell>
-                    <TableCell>Description</TableCell>
-                    <TableCell>URL</TableCell>
-                    <TableCell>Coin</TableCell>
-                    <TableCell>Limit Member</TableCell>
-                    <TableCell>Actions</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">ID</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">Level Name</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">Subject Name</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">Tutor Name</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">Service Name</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">Description</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">URL</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">Coin</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">Limit Member</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

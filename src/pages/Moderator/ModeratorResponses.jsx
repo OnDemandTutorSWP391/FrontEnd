@@ -67,12 +67,12 @@ const ModeratorResponses = () => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>ID</TableCell>
-                    <TableCell>Request ID</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Full Name</TableCell>
-                    <TableCell>Response Date</TableCell>
-                    <TableCell>Description</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">ID</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">Request ID</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">Category</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">Full Name</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">Response Date</TableCell>
+                    <TableCell className="bg-slate-500 !text-xl !font-bold">Description</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

@@ -9,6 +9,7 @@ import { getUserCoin as fetchUserCoin } from "../../service/CoinService";
 import LoadScripts from "../../pages/HomePage/LoadScript";
 import { useContext, useEffect, useState } from "react";
 import useToggleStore from "./useToggleStore";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { isLoggedIn, user, clearToken } = useStore();
@@ -22,6 +23,8 @@ const Header = () => {
   });
   const [userCoin, setUserCoin] = useState();
   const { isActive, toggle } = useToggleStore();
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (checkTokenExpiration()) {
       clearToken();
@@ -29,7 +32,7 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    if (isLoggedIn()) {
+    if (isLoggedIn() && !isModerator() && !isAdmin()) {
       const getRequestCategories = async () => {
         const response = await getUserProfile();
         setUserProfile(response.data.data);
@@ -37,8 +40,9 @@ const Header = () => {
       getRequestCategories();
     }
   }, [isLoggedIn()]);
+
   useEffect(() => {
-    if (isLoggedIn()) {
+    if (isLoggedIn() && !isModerator() && !isAdmin()) {
       const fetchCoin = async () => {
         const response = await fetchUserCoin();
         setUserCoin(response.data.data);
@@ -47,69 +51,71 @@ const Header = () => {
     }
   }, [isLoggedIn(), isActive]);
 
-  const getUserLink = () => {
-    const role =
-      user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-    switch (role) {
-      case "Student":
-        return "/profile";
-      case "Tutor":
-        return "/tutor";
-      case "Moderator":
-        return "/moderator";
-      case "Admin":
-        return "/admin";
-      default:
-        return "/profile";
+  const isModerator = () => {
+    return user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] === "Moderator";
+  };
+
+  const isAdmin = () => {
+    return user["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] === "Admin";
+  };
+
+  const handleConsoleClick = () => {
+    if (isModerator()) {
+      navigate("/moderator");
+    } else if (isAdmin()) {
+      navigate("/admin");
     }
   };
-  
 
   return (
     <header>
       <div className="navbar-area">
         <div className="row bg-white">
           <div className="col-md-1"></div>
-          <div className="col-md-3  h-14 flex items-center">
-            {isLoggedIn() && (
-              <a href={getUserLink()} className="text-3xl">
+          <div className="col-md-3 h-14 flex items-center">
+            {isLoggedIn() && !isModerator() && !isAdmin() && (
+              <a href="/profile" className="text-3xl">
                 Welcome, {userProfile.fullName}
               </a>
+            )}
+            {isLoggedIn() && (isModerator() || isAdmin()) && (
+              <button onClick={handleConsoleClick} className="btn btn-primary" style={{ backgroundColor: '#FDC800', borderColor: '#FDC800' }}>
+                {isModerator() ? "Go to Moderator Console" : "Go to Admin Console"}
+              </button>
             )}
           </div>
           <div className="col-md-1"></div>
           <div className="col-md-1"></div>
           <div className="col-md-1"></div>
-
           <div className="col-md-1 flex justify-end">
-            {isLoggedIn() ? (
+            {isLoggedIn() && !isModerator() && !isAdmin() ? (
               <img
                 className="w-14 h-14 rounded-full object-cover"
                 src={userProfile.avatar}
                 alt="User Avatar"
               />
-            ) : (
+            ) : !isLoggedIn() ? (
               <a
                 className="no-underline text-black !flex !justify-center !items-center"
                 href="/login"
               >
                 Sign In
               </a>
-            )}
+            ) : null}
           </div>
           <div className="col-md-1 h-14">
-            {isLoggedIn() ? (
-              <p className=" !h-14 !flex !justify-start !items-center">
+            {isLoggedIn() && !isModerator() && !isAdmin() ? (
+              <p className="!h-14 !flex !justify-start !items-center">
                 Coin: {userCoin}
               </p>
-            ) : (
+            ) : !isLoggedIn() ? (
               <a
                 className="btn btn-base !flex !justify-center !items-center"
                 href="/register"
               >
                 Sign Up
               </a>
-            )}
+            ) : null}
           </div>
           <div className="col-md-1">
             {isLoggedIn() && (
@@ -129,8 +135,7 @@ const Header = () => {
                 <ul>
                   <li>
                     <p>
-                      <i className="fa fa-map-marker"></i> FPT University -
-                      SWP391
+                      <i className="fa fa-map-marker"></i> FPT University - SWP391
                     </p>
                   </li>
                   <li>
@@ -176,10 +181,9 @@ const Header = () => {
             </div>
             <div className="logo">
               <a href="/">
-                <img src="/public/img/logo.png" alt="img" />
+                <img src="https://firebasestorage.googleapis.com/v0/b/swp391-fbb3f.appspot.com/o/Homepage%2Flogo.png?alt=media&token=ed8cb4a6-1f84-4673-81a2-b64845ca7bfe" alt="img" />
               </a>
             </div>
-
             <div className="collapse navbar-collapse" id="edumint_main_menu">
               <ul className="navbar-nav menu-open">
                 <li className="menu-item-has-children current-menu-item">
@@ -213,7 +217,6 @@ const Header = () => {
             </div>
           </div>
         </nav>
-        {/* <LoadScripts /> */}
       </div>
     </header>
   );
