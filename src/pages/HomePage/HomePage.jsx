@@ -122,7 +122,7 @@ const HomePage = () => {
               <div className="col-lg-6">
                 <div className="about-thumb-wrap left-icon">
                   <div className="about-icon">
-                    <img src="/public/images/elearning-portals-cover-picture.svg" />
+                    <img src="https://firebasestorage.googleapis.com/v0/b/swp391-fbb3f.appspot.com/o/Homepage%2Felearning-portals-cover-picture.svg?alt=media&token=51e22cc5-cecb-4665-98f7-3a90caeba225" />
                   </div>
                   <div className="bottom-content">
                     We uphold high standards of educational excellence to ensure

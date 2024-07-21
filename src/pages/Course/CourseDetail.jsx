@@ -118,13 +118,8 @@ const CourseDetail = () => {
         <div className="container">
           <div className="breadcrumb-inner">
             <div className="section-title mb-0 text-center">
-              <h2 className="page-title">Courses Single</h2>
-              <ul className="page-list">
-                <li>
-                  <a href="index.html">Home</a>
-                </li>
-                <li>Courses Single</li>
-              </ul>
+              <h2 className="page-title">Courses Detail</h2>
+             
             </div>
           </div>
         </div>

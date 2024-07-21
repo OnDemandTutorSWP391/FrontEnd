@@ -79,7 +79,7 @@ const CoinDeposit = () => {
                                                 style={{ marginLeft: '10px', flexGrow: 1 }}
                                             />
                                             <img 
-                                                src="/public/images/download-logo-vnpayqr-mien-phi.jpg" 
+                                                src="https://firebasestorage.googleapis.com/v0/b/swp391-fbb3f.appspot.com/o/Homepage%2Fdownload-logo-vnpayqr-mien-phi.jpg?alt=media&token=9d8f0e45-ae3b-4509-923b-6dbfd7288235" 
                                                 alt="VNPAY" 
                                                 style={{ marginLeft: '10px', height: '60px', width: '60px' }}
                                             />
