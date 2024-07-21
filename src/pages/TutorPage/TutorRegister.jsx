@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import "../TutorPage/user.css";
-import { getUserProfile } from '../../service/UserProfileService';
 import { postTutorRegister } from '../../service/TutorService';
 import { ToastContainer, toast } from 'react-toastify';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../../firebase';
 
 const TutorRegister = () => {
     const [tutorRegister, setTutorRegister] = useState({
@@ -15,84 +16,125 @@ const TutorRegister = () => {
         tutorServiceVideo: "",
         learningMaterialDemo: "",
     });
+
+    const [degreeFile, setDegreeFile] = useState(null);
+    const [videoFile, setVideoFile] = useState(null);
+    const [loading, setLoading] = useState(false);
+
     const handleDataChange = (key, value) => {
         setTutorRegister({ ...tutorRegister, [key]: value });
     };
-    const handleRegister = async (e) => {
-        e.preventDefault(); // Prevent the default form submission behavior
-    
-        const response = await postTutorRegister(tutorRegister); // Use formData directly
-        console.log(response);
-    
-        
-          
-        if(response.err){
-            toast.error("One or more validation errors occurred.")
-        }else{
-            toast.success(response.data.message);
 
+    const handleFileChange = (e, fileType) => {
+        if (fileType === 'degree') {
+            setDegreeFile(e.target.files[0]);
+        } else if (fileType === 'video') {
+            setVideoFile(e.target.files[0]);
         }
-          
-        
-        // handle response
-      };
-    
+    };
+
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            let degreeUrl = "";
+            let videoUrl = "";
+
+            if (degreeFile) {
+                const degreeRef = ref(storage, `degrees/${degreeFile.name}`);
+                await uploadBytes(degreeRef, degreeFile);
+                degreeUrl = await getDownloadURL(degreeRef);
+            }
+
+            if (videoFile) {
+                if (videoFile.size > 100 * 1024 * 1024) {
+                    toast.error("Video file size should be less than 100MB");
+                    setLoading(false);
+                    return;
+                }
+                const videoRef = ref(storage, `videos/${videoFile.name}`);
+                await uploadBytes(videoRef, videoFile);
+                videoUrl = await getDownloadURL(videoRef);
+            }
+
+            const updatedTutorRegister = {
+                ...tutorRegister,
+                degree: degreeUrl,
+                tutorServiceVideo: videoUrl,
+            };
+
+            const response = await postTutorRegister(updatedTutorRegister);
+            console.log(response);
+
+            if (response.err) {
+                toast.error("One or more validation errors occurred.");
+            } else {
+                toast.success(response.data.message);
+            }
+        } catch (error) {
+            console.error('Error during registration:', error);
+            toast.error("An error occurred during registration.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div>
-            <div class="col-xl-8">
-                <div class="card mb-4">
-                    <div class="card-header">Account Details</div>
-                    <div class="card-body">
+            <div className="col-xl-8">
+                <div className="card mb-4">
+                    <div className="card-header">Account Details</div>
+                    <div className="card-body">
                         <form onSubmit={handleRegister}>
-                            <div class="mb-3">
-                                <label class="small mb-1" for="inputUsername">Username (how your name will appear to other users on the site)</label>
-                                <input class="form-control" id="inputUsername" type="text" placeholder="enter your academicLevel"  onChange={(e) => handleDataChange("academicLevel", e.target.value)}/>
+                            <div className="mb-3">
+                                <label className="small mb-1" htmlFor="inputUsername">Username (how your name will appear to other users on the site)</label>
+                                <input className="form-control" id="inputUsername" type="text" placeholder="Enter your academic level" onChange={(e) => handleDataChange("academicLevel", e.target.value)} />
                             </div>
 
-                            <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputFirstName">workPlace</label>
-                                    <input class="form-control" id="inputFirstName" type="text" placeholder="Enter your workPlace"  onChange={(e) => handleDataChange("workPlace", e.target.value)}/>
+                            <div className="row gx-3 mb-3">
+                                <div className="col-md-6">
+                                    <label className="small mb-1" htmlFor="inputWorkPlace">Work Place</label>
+                                    <input className="form-control" id="inputWorkPlace" type="text" placeholder="Enter your work place" onChange={(e) => handleDataChange("workPlace", e.target.value)} />
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputLastName">degree</label>
-                                    <input class="form-control" id="inputLastName" type="text" placeholder="upload your degree"  onChange={(e) => handleDataChange("degree", e.target.value)}/>
+                                <div className="mb-3">
+                                    <label className="small mb-1" htmlFor="inputDegree">Degree (PDF)</label>
+                                    <input className="form-control" id="inputDegree" type="file" accept=".pdf" placeholder="Upload degree" onChange={(e) => handleFileChange(e, 'degree')} />
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label class="small mb-1" for="inputEmailAddress">creditCard</label>
-                                <input class="form-control" id="inputEmailAddress" type="text" placeholder="Enter your creditCard"  onChange={(e) => handleDataChange("creditCard", e.target.value)}/>
+                            <div className="mb-3">
+                                <label className="small mb-1" htmlFor="inputCreditCard">Credit Card</label>
+                                <input className="form-control" id="inputCreditCard" type="text" placeholder="Enter your credit card" onChange={(e) => handleDataChange("creditCard", e.target.value)} />
                             </div>
 
-                            <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputBirthday">tutorServiceName</label>
-                                    <input class="form-control" id="inputBirthday" type="text" name="tutorServiceName" placeholder="Enter your tutorServiceName" onChange={(e) => handleDataChange("tutorServiceName", e.target.value)} />
+                            <div className="row gx-3 mb-3">
+                                <div className="col-md-6">
+                                    <label className="small mb-1" htmlFor="inputServiceName">Tutor Service Name</label>
+                                    <input className="form-control" id="inputServiceName" type="text" placeholder="Enter your tutor service name" onChange={(e) => handleDataChange("tutorServiceName", e.target.value)} />
                                 </div>
                             </div>
-                            <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputBirthday">tutorServiceDescription</label>
-                                    <input class="form-control" id="inputBirthday" type="text" name="tutorServiceDescription" placeholder="Enter your tutorServiceDescription" onChange={(e) => handleDataChange("tutorServiceDescription", e.target.value)} />
+                            <div className="row gx-3 mb-3">
+                                <div className="col-md-6">
+                                    <label className="small mb-1" htmlFor="inputServiceDescription">Tutor Service Description</label>
+                                    <input className="form-control" id="inputServiceDescription" type="text" placeholder="Enter your tutor service description" onChange={(e) => handleDataChange("tutorServiceDescription", e.target.value)} />
                                 </div>
                             </div>
-                            <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="tutorServiceVideo">tutorServiceVideo</label>
-                                    <input class="form-control" id="inputBirthday" type="text" name="tutorServiceVideo" placeholder="Enter your tutorServiceVideo" onChange={(e) => handleDataChange("tutorServiceVideo", e.target.value)}  />
-                                </div>
+                            <div className="mb-3">
+                                <label className="small mb-1" htmlFor="inputVideo">Tutor Service Video (max 100MB)</label>
+                                <input className="form-control" placeholder="Upload video demo" id="inputVideo" type="file" accept="video/*" onChange={(e) => handleFileChange(e, 'video')} />
                             </div>
-                            <div class="row gx-3 mb-3">
-                                <div class="col-md-6">
-                                    <label class="small mb-1" for="inputBirthday">learningMaterialDemo</label>
-                                    <input class="form-control" id="inputBirthday" type="text" name="birthday" placeholder="Upload your learningMaterialDemo" onChange={(e) => handleDataChange("learningMaterialDemo", e.target.value)} />
+                            <div className="row gx-3 mb-3">
+                                <div className="col-md-6">
+                                    <label className="small mb-1" htmlFor="inputLearningMaterial">Learning Material Demo</label>
+                                    <input className="form-control" id="inputLearningMaterial" type="text" placeholder="Upload your learning material demo" onChange={(e) => handleDataChange("learningMaterialDemo", e.target.value)} />
                                 </div>
                             </div>
                             
-                            <button class="btn btn-primary" type="submit">Save changes</button>
-                            <ToastContainer/>
+                            <button className="btn btn-primary" type="submit" disabled={loading}>
+                                {loading ? "Saving..." : "Save changes"}
+                            </button>
+                            <ToastContainer />
                         </form>
                     </div>
                 </div>

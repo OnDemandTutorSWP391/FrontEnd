@@ -10,27 +10,7 @@ const Footer = () => {
   return (<>
   
     <footer className="footer-area bg-gray">
-        <div className="footer-subscribe">
-            <div className="container">
-                <form className="footer-subscribe-inner">
-                    <div className="row">
-                        <div className="col-lg-5">
-                            <div className="single-input-inner style-border-bottom">
-                                <input type="text" placeholder="Your Full Name"/>
-                            </div>
-                        </div>
-                        <div className="col-lg-5">
-                            <div className="single-input-inner style-border-bottom">
-                                <input type="text" placeholder="Your Email Address"/>
-                            </div>
-                        </div>
-                        <div className="col-lg-2">
-                            <a className="btn btn-base" href="#">Subscribe</a>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+        
         <div className="footer-top">
             <div className="container">
                 <div className="row">
@@ -107,7 +87,7 @@ const Footer = () => {
                         </ul>
                     </div>
                     <div className="col-lg-4 order-lg-8 text-lg-center align-self-center mt-lg-0 mt-3">
-                        <p>copyright 2022 by solverwp.com</p>
+                        
                     </div>
                 </div>
             </div>

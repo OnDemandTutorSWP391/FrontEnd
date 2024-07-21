@@ -198,7 +198,7 @@ export const tokens = (mode) => ({
   });
   
   export const useMode = () => {
-    const [mode, setMode] = useState("dark");
+    const [mode, setMode] = useState("light");
   
     const colorMode = useMemo(
       () => ({

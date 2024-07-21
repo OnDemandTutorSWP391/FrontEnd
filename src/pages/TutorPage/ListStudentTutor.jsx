@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   Container,
   Paper,
@@ -18,24 +18,30 @@ import {
   DialogContentText,
   DialogTitle,
   Snackbar,
-  Alert
-} from '@mui/material';
-import { axiosClient } from '../../axios/AxiosClient';
+  Alert,
+} from "@mui/material";
+import { axiosClient } from "../../axios/AxiosClient";
+import AdminHeader from "../../components/AdminHeader/AdminHeader";
 
 const StudentList = () => {
   const [students, setStudents] = useState([]);
-  const [subjectLevelId, setSubjectLevelId] = useState('');
-  const [studentId, setStudentId] = useState('');
+  const [subjectLevelId, setSubjectLevelId] = useState("");
+  const [studentId, setStudentId] = useState("");
   const [page, setPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [totalCount, setTotalCount] = useState(0);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState(null);
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+  });
 
   const fetchStudents = async () => {
     try {
-      let url = `/StudentJoins/student-join-list-for-tutor?page=${page + 1}&pageSize=${rowsPerPage}`;
+      let url = `/StudentJoins/student-join-list-for-tutor?page=${currentPage}&pageSize=${10}`;
       if (subjectLevelId) url += `&subjectLevelId=${subjectLevelId}`;
       if (studentId) url += `&studentId=${studentId}`;
 
@@ -43,28 +49,23 @@ const StudentList = () => {
 
       const response = await axiosClient.get(url);
 
-      console.log('Response data:', response.data); // Logging the response data
+      console.log("Response data:", response.data); // Logging the response data
 
       setStudents(response.data.data || []); // Ensure students is an array
-      setTotalCount(response.data.totalCount || 0); // Ensure totalCount is a number
+      setTotalPages(Math.ceil(response.data.total / 10)); // Ensure totalCount is a number
     } catch (error) {
-      console.error('Error fetching students:', error);
-      setSnackbar({ open: true, message: 'Error fetching students', severity: 'error' });
+      console.error("Error fetching students:", error);
+      setSnackbar({
+        open: true,
+        message: "Error fetching students",
+        severity: "error",
+      });
     }
   };
 
   useEffect(() => {
     fetchStudents();
-  }, [page, rowsPerPage, subjectLevelId, studentId]);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  }, [currentPage, subjectLevelId, studentId]);
 
   const handleDeleteClick = (student) => {
     setSelectedStudent(student);
@@ -78,63 +79,117 @@ const StudentList = () => {
 
   const handleDeleteConfirm = async () => {
     try {
-      await axiosClient.delete(`/StudentJoins/delete-student-for-tutor?studentJoinId=${selectedStudent.id}`);
+      await axiosClient.delete(
+        `/StudentJoins/delete-student-for-tutor?studentJoinId=${selectedStudent.id}`
+      );
       console.log(selectedStudent.id);
-      setSnackbar({ open: true, message: 'Student deleted successfully', severity: 'success' });
+      setSnackbar({
+        open: true,
+        message: "Student deleted successfully",
+        severity: "success",
+      });
       fetchStudents();
     } catch (error) {
-      console.error('Error deleting student:', error);
-      setSnackbar({ open: true, message: 'Error deleting student', severity: 'error' });
+      console.error("Error deleting student:", error);
+      setSnackbar({
+        open: true,
+        message: "Error deleting student",
+        severity: "error",
+      });
     }
     handleCloseDialog();
   };
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
-    <Container maxWidth="lg">
-      <Paper elevation={3} sx={{ p: 4, mt: 4 }}>
-        <Typography variant="h4" gutterBottom>
-          Student List
-        </Typography>
-        <TextField
-          label="Subject Level ID"
-          value={subjectLevelId}
-          onChange={(e) => setSubjectLevelId(e.target.value)}
-          margin="normal"
-          fullWidth
-        />
-        <TextField
-          label="Student ID"
-          value={studentId}
-          onChange={(e) => setStudentId(e.target.value)}
-          margin="normal"
-          fullWidth
-        />
-        <Button variant="contained" onClick={() => setPage(0)} sx={{ mt: 2 }}>
-          Filter
-        </Button>
-        <TableContainer component={Paper} sx={{ mt: 4 }}>
+    <>
+      <div className="p-10">
+        <AdminHeader title="Student List" />
+        <div className="flex gap-5 mb-3">
+          <TextField
+            label="Subject Level ID"
+            value={subjectLevelId}
+            onChange={(e) => setSubjectLevelId(e.target.value)}
+          />
+          <TextField
+            label="Student ID"
+            value={studentId}
+            onChange={(e) => setStudentId(e.target.value)}
+          />
+          <Button
+            variant="contained"
+            className="!text-xl !capitalize"
+            color="primary"
+            onClick={() => setPage(0)}
+          >
+            Search
+          </Button>
+        </div>
+        <div className="w-full flex justify-end mt-10">
+          <Button
+            className="!text-xl !mr-3"
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            Trước
+          </Button>
+          <span className="text-xl mt-1">
+            Trang {currentPage} / {totalPages}
+          </span>
+          <Button
+            className="!text-xl ml-3"
+            disabled={currentPage === totalPages}
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
+            Sau
+          </Button>
+        </div>
+        <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Full Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>User ID</TableCell>
-                <TableCell>Subject Level ID</TableCell>
-                <TableCell>Actions</TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">
+                  ID
+                </TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">
+                  Full Name
+                </TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">
+                  Email
+                </TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">
+                  User ID
+                </TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">
+                  Subject Level ID
+                </TableCell>
+                <TableCell className="bg-slate-500 !text-xl !font-bold">
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {students && students.length > 0 ? (
                 students.map((student) => (
                   <TableRow key={student.id}>
-                    <TableCell>{student.id}</TableCell>
-                    <TableCell>{student.fullName}</TableCell>
-                    <TableCell>{student.email}</TableCell>
-                    <TableCell>{student.userId}</TableCell>
-                    <TableCell>{student.subjectLevelId}</TableCell>
+                    <TableCell className="!text-sm">{student.id}</TableCell>
+                    <TableCell className="!text-sm">
+                      {student.fullName}
+                    </TableCell>
+                    <TableCell className="!text-sm">{student.email}</TableCell>
+                    <TableCell className="!text-sm">{student.userId}</TableCell>
+                    <TableCell className="!text-sm">
+                      {student.subjectLevelId}
+                    </TableCell>
                     <TableCell>
-                      <Button color="error" onClick={() => handleDeleteClick(student)}>
+                      <Button
+                        color="error"
+                        className="!text-xl !capitalize"
+                        onClick={() => handleDeleteClick(student)}
+                      >
                         Delete
                       </Button>
                     </TableCell>
@@ -150,15 +205,8 @@ const StudentList = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          component="div"
-          count={totalCount}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+        {/* Phần điều hướng trang */}
+      </div>
 
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>Confirm Deletion</DialogTitle>
@@ -180,11 +228,14 @@ const StudentList = () => {
         autoHideDuration={6000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
       >
-        <Alert onClose={() => setSnackbar({ ...snackbar, open: false })} severity={snackbar.severity}>
+        <Alert
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          severity={snackbar.severity}
+        >
           {snackbar.message}
         </Alert>
       </Snackbar>
-    </Container>
+    </>
   );
 };
 

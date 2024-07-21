@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { postConfirmDeposit } from '../../service/CoinService';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { postConfirmDeposit } from "../../service/CoinService";
+import useToggleStore from "../../components/Header/useToggleStore";
 
 const PaymentResult = () => {
   const location = useLocation();
@@ -8,35 +9,41 @@ const PaymentResult = () => {
   const [paymentResult, setPaymentResult] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { isActive, toggle } = useToggleStore();
 
   useEffect(() => {
     const confirmPayment = async () => {
       try {
         const params = new URLSearchParams(location.search);
-        
+
         const dataToSend = {
-          success: params.get('success') === 'True',
-          message: decodeURIComponent(params.get('message') || ''),
+          success: params.get("success") === "True",
+          message: decodeURIComponent(params.get("message") || ""),
           data: {
-            paymentMethod: params.get('paymentMethod'),
-            orderDescription: decodeURIComponent(params.get('orderDescription') || ''),
-            orderId: params.get('orderId'),
-            transactionId: params.get('transactionId'),
-            token: params.get('token'),
-            vnPayResponseCode: params.get('vnPayResponseCode'),
-            amount: params.get('amount'),
+            paymentMethod: params.get("paymentMethod"),
+            orderDescription: decodeURIComponent(
+              params.get("orderDescription") || ""
+            ),
+            orderId: params.get("orderId"),
+            transactionId: params.get("transactionId"),
+            token: params.get("token"),
+            vnPayResponseCode: params.get("vnPayResponseCode"),
+            amount: params.get("amount"),
           },
         };
 
-        console.log('Data to send:', dataToSend);
+        console.log("Data to send:", dataToSend);
 
         const response = await postConfirmDeposit(dataToSend);
-        navigate('/')
-        console.log('API Response:', response.data);
+        toggle();
+        navigate("/");
+        console.log("API Response:", response.data);
         setPaymentResult(response.data);
       } catch (error) {
-        console.error('Error confirming payment:', error);
-        setError(error.message || 'An error occurred while confirming the payment');
+        console.error("Error confirming payment:", error);
+        setError(
+          error.message || "An error occurred while confirming the payment"
+        );
       } finally {
         setIsLoading(false);
       }
@@ -58,12 +65,12 @@ const PaymentResult = () => {
       <h1>Payment Result</h1>
       {paymentResult && (
         <div>
-          <p>Status: {paymentResult.success ? 'Success' : 'Failure'}</p>
+          <p>Status: {paymentResult.success ? "Success" : "Failure"}</p>
           <p>Message: {paymentResult.message}</p>
           {/* Hiển thị thêm thông tin khác từ paymentResult nếu cần */}
         </div>
       )}
-      <button onClick={() => navigate('/')}>Return to Home</button>
+      <button onClick={() => navigate("/")}>Return to Home</button>
     </div>
   );
 };

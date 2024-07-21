@@ -265,6 +265,7 @@ const ModeratorRequests = () => {
               <Typography><strong>Academic Level:</strong> {tutorData.academicLevel}</Typography>
               <Typography><strong>Work Place:</strong> {tutorData.workPlace}</Typography>
               <Typography><strong>Degree:</strong> {tutorData.degree}</Typography>
+              <Typography><strong>Video:</strong> {tutorData.tutorServiceVideo}</Typography>
               <Typography><strong>Service Name:</strong> {tutorData.tutorServiceName}</Typography>
               <Typography><strong>Service Description:</strong> {tutorData.tutorServiceDescription}</Typography>
               <Typography><strong>Status:</strong> {tutorData.status}</Typography>

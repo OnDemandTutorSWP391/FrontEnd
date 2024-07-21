@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { postRegister } from '../../service/AccountService';
-import { ToastContainer, toast } from 'react-toastify'; // Make sure to install and import react-toastify
-import { useNavigate } from 'react-router-dom';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../../firebase';
-
+import React, { useState } from "react";
+import { postRegister } from "../../service/AccountService";
+import { ToastContainer, toast } from "react-toastify"; // Make sure to install and import react-toastify
+import { useNavigate } from "react-router-dom";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../../firebase";
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -46,23 +45,28 @@ const RegisterPage = () => {
     console.log(response);
 
     if (response.err) {
-      toast.error("Registration failed");
+      toast.error(response.err.response.data.message.split('.')[2]);
     } else {
-      navigate("/login")
-      toast.success("Registration successful");
+      navigate("/login");
+      toast.success("Đăng kí thành công");
     }
     // handle response
   };
 
   return (
     <div>
-      <div className="breadcrumb-area bg-overlay" style={{ backgroundImage: "url('assets/img/bg/3.png')" }}>
+      <div
+        className="breadcrumb-area bg-overlay"
+        style={{ backgroundImage: "url('assets/img/bg/3.png')" }}
+      >
         <div className="container">
           <div className="breadcrumb-inner">
             <div className="section-title mb-0 text-center">
               <h2 className="page-title">Sign Up</h2>
               <ul className="page-list">
-                <li><a href="index.html">Home</a></li>
+                <li>
+                  <a href="index.html">Home</a>
+                </li>
                 <li>Sign Up</li>
               </ul>
             </div>
@@ -78,42 +82,88 @@ const RegisterPage = () => {
                 <div className="row">
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
-                      <input type="text" placeholder="Full Name" onChange={(e) => handleDataChange("fullName", e.target.value)} />
+                      <input
+                        type="text"
+                        placeholder="Full Name"
+                        onChange={(e) =>
+                          handleDataChange("fullName", e.target.value)
+                        }
+                      />
                     </div>
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
-                      <input type="text" placeholder="Email" onChange={(e) => handleDataChange("email", e.target.value)} />
+                      <input
+                        type="email"
+                        placeholder="Email"
+                        onChange={(e) =>
+                          handleDataChange("email", e.target.value)
+                        }
+                      />
                     </div>
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
-                      <input type="password" placeholder="Password" onChange={(e) => handleDataChange("password", e.target.value)} />
+                      <input
+                        type="password"
+                        placeholder="Password"
+                        onChange={(e) =>
+                          handleDataChange("password", e.target.value)
+                        }
+                      />
                     </div>
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
-                      <input type="password" placeholder="Confirm Password" onChange={(e) => handleDataChange("confirmedPassword", e.target.value)} />
+                      <input
+                        type="password"
+                        placeholder="Confirm Password"
+                        onChange={(e) =>
+                          handleDataChange("confirmedPassword", e.target.value)
+                        }
+                      />
                     </div>
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
-                      <input type="text" placeholder="Identity Card" onChange={(e) => handleDataChange("identityCard", e.target.value)} />
+                      <input
+                        type="text"
+                        placeholder="Identity Card"
+                        onChange={(e) =>
+                          handleDataChange("identityCard", e.target.value)
+                        }
+                      />
                     </div>
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
-                      <input type="date" placeholder="DOB" onChange={(e) => handleDataChange("dob", e.target.value)} />
+                      <input
+                        type="date"
+                        placeholder="DOB"
+                        onChange={(e) =>
+                          handleDataChange("dob", e.target.value)
+                        }
+                      />
                     </div>
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
-                      <input type="text" placeholder="Phone Number" onChange={(e) => handleDataChange("phoneNumber", e.target.value)} />
+                      <input
+                        type="text"
+                        placeholder="Phone Number"
+                        onChange={(e) =>
+                          handleDataChange("phoneNumber", e.target.value)
+                        }
+                      />
                     </div>
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
-                      <select onChange={(e) => handleDataChange("gender", e.target.value)}>
+                      <select
+                        onChange={(e) =>
+                          handleDataChange("gender", e.target.value)
+                        }
+                      >
                         <option value="">Select Gender</option>
                         <option value="female">Female</option>
                         <option value="male">Male</option>
@@ -123,12 +173,20 @@ const RegisterPage = () => {
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
-                      <input type="file" placeholder="Avatar" onChange={handleAvatarChange} />
+                      <input
+                        type="file"
+                        placeholder="Avatar"
+                        onChange={handleAvatarChange}
+                      />
                     </div>
                   </div>
                   <div className="col-12">
                     <div className="single-input-inner style-bg-border">
-                      <select onChange={(e) => handleDataChange("role", e.target.value)}>
+                      <select
+                        onChange={(e) =>
+                          handleDataChange("role", e.target.value)
+                        }
+                      >
                         <option value="">Are You a Tutor or Student?</option>
                         <option value="Tutor">Tutor</option>
                         <option value="Student">Student</option>
@@ -136,12 +194,16 @@ const RegisterPage = () => {
                     </div>
                   </div>
                   <div className="col-12 mb-4">
-                    <button className="btn btn-base w-100" type="submit">Create Account</button>
+                    <button className="btn btn-base w-100" type="submit">
+                      Create Account
+                    </button>
                     <ToastContainer />
                   </div>
                   <div className="col-12">
                     <span>By creating an account</span>
-                    <a href="/login"><strong>Signin</strong></a>
+                    <a href="/login">
+                      <strong>Signin</strong>
+                    </a>
                   </div>
                 </div>
               </form>
@@ -151,6 +213,6 @@ const RegisterPage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default RegisterPage;
