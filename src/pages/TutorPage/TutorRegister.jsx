@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import "../TutorPage/user.css";
 import { postTutorRegister } from '../../service/TutorService';
 import { ToastContainer, toast } from 'react-toastify';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import 'react-toastify/dist/ReactToastify.css';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase';
 
 const TutorRegister = () => {
@@ -15,10 +16,12 @@ const TutorRegister = () => {
         tutorServiceDescription: "",
         tutorServiceVideo: "",
         learningMaterialDemo: "",
+        imageUrl: "",
     });
 
     const [degreeFile, setDegreeFile] = useState(null);
     const [videoFile, setVideoFile] = useState(null);
+    const [imageFile, setImageFile] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const handleDataChange = (key, value) => {
@@ -30,6 +33,8 @@ const TutorRegister = () => {
             setDegreeFile(e.target.files[0]);
         } else if (fileType === 'video') {
             setVideoFile(e.target.files[0]);
+        } else if (fileType === 'image') {
+            setImageFile(e.target.files[0]);
         }
     };
 
@@ -40,6 +45,7 @@ const TutorRegister = () => {
         try {
             let degreeUrl = "";
             let videoUrl = "";
+            let imageUrl = "";
 
             if (degreeFile) {
                 const degreeRef = ref(storage, `degrees/${degreeFile.name}`);
@@ -58,10 +64,17 @@ const TutorRegister = () => {
                 videoUrl = await getDownloadURL(videoRef);
             }
 
+            if (imageFile) {
+                const imageRef = ref(storage, `images/${imageFile.name}`);
+                await uploadBytes(imageRef, imageFile);
+                imageUrl = await getDownloadURL(imageRef);
+            }
+
             const updatedTutorRegister = {
                 ...tutorRegister,
                 degree: degreeUrl,
                 tutorServiceVideo: videoUrl,
+                imageUrl: imageUrl,
             };
 
             const response = await postTutorRegister(updatedTutorRegister);
@@ -88,57 +101,114 @@ const TutorRegister = () => {
                     <div className="card-body">
                         <form onSubmit={handleRegister}>
                             <div className="mb-3">
-                                <label className="small mb-1" htmlFor="inputUsername">Username (how your name will appear to other users on the site)</label>
-                                <input className="form-control" id="inputUsername" type="text" placeholder="Enter your academic level" onChange={(e) => handleDataChange("academicLevel", e.target.value)} />
+                                <label className="small mb-1" htmlFor="inputUsername">Academic Level</label>
+                                <input 
+                                    className="form-control" 
+                                    id="inputUsername" 
+                                    type="text" 
+                                    placeholder="Enter your academic level" 
+                                    onChange={(e) => handleDataChange("academicLevel", e.target.value)} 
+                                />
                             </div>
 
                             <div className="row gx-3 mb-3">
                                 <div className="col-md-6">
                                     <label className="small mb-1" htmlFor="inputWorkPlace">Work Place</label>
-                                    <input className="form-control" id="inputWorkPlace" type="text" placeholder="Enter your work place" onChange={(e) => handleDataChange("workPlace", e.target.value)} />
+                                    <input 
+                                        className="form-control" 
+                                        id="inputWorkPlace" 
+                                        type="text" 
+                                        placeholder="Enter your work place" 
+                                        onChange={(e) => handleDataChange("workPlace", e.target.value)} 
+                                    />
                                 </div>
-                                <div className="mb-3">
+                                <div className="col-md-6">
                                     <label className="small mb-1" htmlFor="inputDegree">Degree (PDF)</label>
-                                    <input className="form-control" id="inputDegree" type="file" accept=".pdf" placeholder="Upload degree" onChange={(e) => handleFileChange(e, 'degree')} />
+                                    <input 
+                                        className="form-control" 
+                                        id="inputDegree" 
+                                        type="file" 
+                                        accept=".pdf" 
+                                        onChange={(e) => handleFileChange(e, 'degree')} 
+                                    />
                                 </div>
                             </div>
 
                             <div className="mb-3">
                                 <label className="small mb-1" htmlFor="inputCreditCard">Credit Card</label>
-                                <input className="form-control" id="inputCreditCard" type="text" placeholder="Enter your credit card" onChange={(e) => handleDataChange("creditCard", e.target.value)} />
+                                <input 
+                                    className="form-control" 
+                                    id="inputCreditCard" 
+                                    type="text" 
+                                    placeholder="Enter your credit card" 
+                                    onChange={(e) => handleDataChange("creditCard", e.target.value)} 
+                                />
                             </div>
 
                             <div className="row gx-3 mb-3">
                                 <div className="col-md-6">
                                     <label className="small mb-1" htmlFor="inputServiceName">Tutor Service Name</label>
-                                    <input className="form-control" id="inputServiceName" type="text" placeholder="Enter your tutor service name" onChange={(e) => handleDataChange("tutorServiceName", e.target.value)} />
+                                    <input 
+                                        className="form-control" 
+                                        id="inputServiceName" 
+                                        type="text" 
+                                        placeholder="Enter your tutor service name" 
+                                        onChange={(e) => handleDataChange("tutorServiceName", e.target.value)} 
+                                    />
                                 </div>
-                            </div>
-                            <div className="row gx-3 mb-3">
                                 <div className="col-md-6">
                                     <label className="small mb-1" htmlFor="inputServiceDescription">Tutor Service Description</label>
-                                    <input className="form-control" id="inputServiceDescription" type="text" placeholder="Enter your tutor service description" onChange={(e) => handleDataChange("tutorServiceDescription", e.target.value)} />
+                                    <input 
+                                        className="form-control" 
+                                        id="inputServiceDescription" 
+                                        type="text" 
+                                        placeholder="Enter your tutor service description" 
+                                        onChange={(e) => handleDataChange("tutorServiceDescription", e.target.value)} 
+                                    />
                                 </div>
                             </div>
+
                             <div className="mb-3">
                                 <label className="small mb-1" htmlFor="inputVideo">Tutor Service Video (max 100MB)</label>
-                                <input className="form-control" placeholder="Upload video demo" id="inputVideo" type="file" accept="video/*" onChange={(e) => handleFileChange(e, 'video')} />
+                                <input 
+                                    className="form-control" 
+                                    id="inputVideo" 
+                                    type="file" 
+                                    accept="video/*" 
+                                    onChange={(e) => handleFileChange(e, 'video')} 
+                                />
                             </div>
-                            <div className="row gx-3 mb-3">
-                                <div className="col-md-6">
-                                    <label className="small mb-1" htmlFor="inputLearningMaterial">Learning Material Demo</label>
-                                    <input className="form-control" id="inputLearningMaterial" type="text" placeholder="Upload your learning material demo" onChange={(e) => handleDataChange("learningMaterialDemo", e.target.value)} />
-                                </div>
+
+                            <div className="mb-3">
+                                <label className="small mb-1" htmlFor="inputLearningMaterial">Learning Material Demo</label>
+                                <input 
+                                    className="form-control" 
+                                    id="inputLearningMaterial" 
+                                    type="text" 
+                                    placeholder="Upload your learning material demo" 
+                                    onChange={(e) => handleDataChange("learningMaterialDemo", e.target.value)} 
+                                />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="small mb-1" htmlFor="inputImage">Profile Image</label>
+                                <input 
+                                    className="form-control" 
+                                    id="inputImage" 
+                                    type="file" 
+                                    accept="image/*" 
+                                    onChange={(e) => handleFileChange(e, 'image')} 
+                                />
                             </div>
                             
                             <button className="btn btn-primary" type="submit" disabled={loading}>
                                 {loading ? "Saving..." : "Save changes"}
                             </button>
-                            <ToastContainer />
                         </form>
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 };
